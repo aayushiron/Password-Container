@@ -14,11 +14,20 @@ My time line is as follows:
   * Save the passwords to an encrypted file
   * Create encryption and decryption methods to secure passwords
 - Week 2
-  * Add Command line support to save passwords to a file
+  * Add Command line support to save passwords to a file and to get data from a file
   * Generate passwords that can be size customizable
+  * Doesn't allow password file to be read or written to unless a password is inputted
 - Week 3
   * Create a graphical interface using a UI CinderBlock like 
   [CIUI](https://www.syedrezaali.com/cinderui/)
+    * Has a list of all the different accounts that have their passwords stored in the file
+    * Allows editing of account name and password
+    * Has UI Element such as a slider to generate a password of a certain size
+    * Can delete or add new passwords to the list of passwords currently available
+    * Has Button to copy text to clipboard
+    * Allows account to be deleted
+    * Password does not show until a show password button is pressed
+    * Doesn't allow any access until a password is entered
 - Stretch Goals:
   * Use full RSA encryption to protect the contents of the password files
   * Encrypt the full state of the application so nobody can hook onto the memory of the 
