@@ -71,15 +71,18 @@ TEST_CASE("Tests for overloaded >> operator") {
 TEST_CASE("Tests for overloaded << operator") {
   PasswordContainer container(100, "CorrectKey");
 
-  SECTION("Throws error if there is no data in the container") {
-    stringstream stream;
-    REQUIRE_THROWS_AS(stream << container, std::logic_error);
-  }
-
   SECTION("Correctly encrypts the data in the container") {
     ifstream file("../../../tests/resources/Data.pwords");
-    stringstream stream;
     file >> container;
-    // TODO: Add correct string representation into test
+
+    stringstream stream;
+    stream << container;
+
+    std::string correct_data = "26630030031231831131725021028631630231531129831"
+        "0302250210281298316316320312315301250211266300300312318311317251210286"
+        "31630231531129831030225121028129831631632031231530125121126630030031231"
+        "8311317252210286316302315311298310302252210281298316316320312315301252";
+
+    REQUIRE(stream.str() == correct_data);
   }
 }

@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <vector>
+#include <string>
 
 namespace passwordcontainer {
 
@@ -19,13 +20,6 @@ class PasswordContainer {
   // A Struct that contains the final details of the accounts for the program to
   // use.
   struct AccountDetails {
-    // Simple constructor that defines the account name, username and password
-    // of the account this object represents.
-    AccountDetails(std::string acc_name,
-                   std::string user,
-                   std::string pass)
-        : name(acc_name), username(user), password(pass) {}
-
     // The name (what website the account is for) of the account
     std::string name;
     // The username and password of the account
@@ -35,8 +29,8 @@ class PasswordContainer {
 
   // Creates a new PasswordContainer using the passed in offset and key. Throws
   // an invalid_argument exception if the offset is less than
-  // minimum_character_offset_ or if the key is an empty string.
-  PasswordContainer(size_t offset, std::string key);
+  // kMinimumCharacterOffset or if the key is an empty string.
+  PasswordContainer(size_t offset, const std::string& key);
 
   // Returns the vector of AccountDetails that contains information for all
   // loaded in accounts.
@@ -61,13 +55,20 @@ class PasswordContainer {
   // container. Also takes in a PasswordContainer called container that is the
   // container that is the container where data is being read from.
   friend std::ostream &operator<<(std::ostream& output,
-                                  PasswordContainer& container);
+                                  const PasswordContainer& container);
 
  private:
-  const size_t minimum_character_offset_ = 100;
+  const size_t kMinimumCharacterOffset = 100;
+
+  // The length that 1 encrypted character has in a file
+  const size_t kEncryptedCharacterLength = 3;
+
+  // Represents the number of details that are in AccountDetails (account name,
+  // username, and password.
+  const size_t kNumDetails = 3;
 
   // The initial offset used to calculate the final offset. Must be at least
-  // minimum_character_offset_.
+  // kMinimumCharacterOffset.
   size_t character_offset_;
 
   // The key used to generate a new offset to decrypt/encrypt the data
@@ -77,10 +78,36 @@ class PasswordContainer {
   std::vector<AccountDetails> accounts_;
 
   // Encrypts the string that is passed in using the character_offset_ and key_.
-  std::string EncryptString(const std::string& str);
+  std::string EncryptString(const std::string& str) const;
 
   // Decrypts the string that is passed in using the character_offset_ and key_.
-  std::string DecryptString(const std::string& str);
+  std::string DecryptString(const std::string& str) const;
+
+  // Adds all the account data that are represented in the passed in
+  // decrypted_string to the container.
+  void AddAllData(const std::string& decrypted_string);
+
+  // Adds the data for one account that is represented by the passed in
+  // line_data string
+  void AddOneAccountData(const std::string& line_data);
+
+  // Returns a string representation of all the data currently in the container.
+  std::string GenerateStringRepresentation() const;
+
+  // Calculates the real offset that is used for encryption using the current
+  // character_offset_ and key_.
+  size_t CalculateRealOffset() const;
+
+  // Converts the passed in string to an int.
+  //
+  // Takes in a string to_convert that is the string to be converted to an int.
+  //
+  // Throws an invalid_argument exception if the string cannot be converted to
+  // an int.
+  int ConvertStringToInt(const std::string& to_convert) const;
+
+  // Finds out whether the passed in int represents a valid char or not
+  bool IsValidChar(int int_representation) const;
 };
 
 }  // namespace passwordcontainer
