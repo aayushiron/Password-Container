@@ -70,11 +70,10 @@ TEST_CASE("Tests for overloaded >> operator") {
 
 TEST_CASE("Tests for overloaded << operator") {
   PasswordContainer container(100, "CorrectKey");
+  ifstream file("../../../tests/resources/Data.pwords");
+  file >> container;
 
   SECTION("Correctly encrypts the data in the container") {
-    ifstream file("../../../tests/resources/Data.pwords");
-    file >> container;
-
     stringstream stream;
     stream << container;
 
@@ -82,6 +81,19 @@ TEST_CASE("Tests for overloaded << operator") {
         "0302250210281298316316320312315301250211266300300312318311317251210286"
         "31630231531129831030225121028129831631632031231530125121126630030031231"
         "8311317252210286316302315311298310302252210281298316316320312315301252";
+
+    REQUIRE(stream.str() == correct_data);
+  }
+
+  SECTION("Correctly encrypts data when the key is changed") {
+    container.SetKey("NewDifferentKey");
+    stringstream stream;
+    stream << container;
+
+    std::string correct_data = "26529929931131731031624920928531530131431029730"
+        "9301249209280297315315319311314300249210265299299311317310316250209285"
+        "3153013143102973093012502092802973153153193113143002502102652992993113"
+        "17310316251209285315301314310297309301251209280297315315319311314300251";
 
     REQUIRE(stream.str() == correct_data);
   }

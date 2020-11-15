@@ -61,6 +61,7 @@ ci_make_app(
         SOURCES         tests/test_main.cc ${SOURCE_FILES} ${TEST_FILES}
         INCLUDES        include
         LIBRARIES       catch2
+        BLOCKS          Cinder-ImGui
 )
 
 if(MSVC)
