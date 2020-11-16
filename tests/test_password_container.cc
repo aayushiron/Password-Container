@@ -8,6 +8,33 @@ using passwordcontainer::PasswordContainer;
 using std::ifstream;
 using std::stringstream;
 
+void CheckForValidData(const PasswordContainer& container) {
+  std::vector<PasswordContainer::AccountDetails> accounts =
+      container.GetAccounts();
+
+  SECTION("Has correct number of accounts") {
+    REQUIRE(container.GetAccounts().size() == 3);
+  }
+
+  SECTION("Has correct data for first account") {
+    REQUIRE(accounts[0].name == "Account1");
+    REQUIRE(accounts[0].username == "Username1");
+    REQUIRE(accounts[0].password == "Password1");
+  }
+
+  SECTION("Has correct data for second account") {
+    REQUIRE(accounts[1].name == "Account2");
+    REQUIRE(accounts[1].username == "Username2");
+    REQUIRE(accounts[1].password == "Password2");
+  }
+
+  SECTION("Has correct data for third account") {
+    REQUIRE(accounts[2].name == "Account3");
+    REQUIRE(accounts[2].username == "Username3");
+    REQUIRE(accounts[2].password == "Password3");
+  }
+}
+
 TEST_CASE("Tests for constructor") {
   SECTION("Throws error if offset is less than minimum") {
     REQUIRE_THROWS_AS(PasswordContainer(0, "key"), std::invalid_argument);
@@ -36,35 +63,17 @@ TEST_CASE("Tests for overloaded >> operator") {
     REQUIRE_THROWS_AS(file >> container, std::invalid_argument);
   }
 
+  SECTION("Throws error for wrong offset passed in") {
+    ifstream file("../../../tests/resources/Data.pwords");
+    container.SetOffset(200);
+    REQUIRE_THROWS_AS(file >> container, std::invalid_argument);
+  }
+
   SECTION("Stores correct data for the correct key passed in") {
     ifstream file("../../../tests/resources/Data.pwords");
-
     file >> container;
 
-    std::vector<PasswordContainer::AccountDetails> accounts =
-        container.GetAccounts();
-
-    SECTION("Has correct number of accounts") {
-      REQUIRE(container.GetAccounts().size() == 3);
-    }
-
-    SECTION("Has correct data for first account") {
-      REQUIRE(accounts[0].name == "Account1");
-      REQUIRE(accounts[0].username == "Username1");
-      REQUIRE(accounts[0].password == "Password1");
-    }
-
-    SECTION("Has correct data for second account") {
-      REQUIRE(accounts[1].name == "Account2");
-      REQUIRE(accounts[1].username == "Username2");
-      REQUIRE(accounts[1].password == "Password2");
-    }
-
-    SECTION("Has correct data for third account") {
-      REQUIRE(accounts[2].name == "Account3");
-      REQUIRE(accounts[2].username == "Username3");
-      REQUIRE(accounts[2].password == "Password3");
-    }
+    CheckForValidData(container);
   }
 }
 
@@ -96,5 +105,71 @@ TEST_CASE("Tests for overloaded << operator") {
         "17310316251209285315301314310297309301251209280297315315319311314300251";
 
     REQUIRE(stream.str() == correct_data);
+  }
+
+  SECTION("Correctly encrypts data when the offset is changed") {
+    container.SetOffset(200);
+    stringstream stream;
+    stream << container;
+
+    std::string correct_data = "36640040041241841141735031038641640241541139841"
+        "0402350310381398416416420412415401350311366400400412418411417351310386"
+        "4164024154113984104023513103813984164164204124154013513113664004004124"
+        "18411417352310386416402415411398410402352310381398416416420412415401352";
+
+    REQUIRE(stream.str() == correct_data);
+  }
+
+  SECTION("Doesn't change data when generating encrypted data string") {
+    stringstream stream;
+    stream << container;
+
+    CheckForValidData(container);
+  }
+}
+
+TEST_CASE("Tests for SetKey") {
+  PasswordContainer container(100, "CorrectKey");
+  ifstream file("../../../tests/resources/Data.pwords");
+  file >> container;
+
+  SECTION("Throws error when passed in key is empty") {
+    REQUIRE_THROWS_AS(container.SetKey(""), std::invalid_argument);
+  }
+
+  SECTION("Does nothing when passed in key is valid") {
+    REQUIRE_NOTHROW(container.SetKey("NewKey"));
+  }
+
+  // This test is here because if the accounts are calculated whenever the
+  // GetAccounts function is called, changing the key will change the
+  // decryption of the data
+  SECTION("Doesn't cause data to get corrupted") {
+    container.SetKey("NewKey");
+
+    CheckForValidData(container);
+  }
+}
+
+TEST_CASE("Tests for SetOffset") {
+  PasswordContainer container(100, "CorrectKey");
+  ifstream file("../../../tests/resources/Data.pwords");
+  file >> container;
+
+  SECTION("Throws error when passed in offset is too small") {
+    REQUIRE_THROWS_AS(container.SetOffset(99), std::invalid_argument);
+  }
+
+  SECTION("Does nothing when passed in offset is valid") {
+    REQUIRE_NOTHROW(container.SetOffset(101));
+  }
+
+  // This test is here because if the accounts are calculated whenever the
+  // GetAccounts function is called, changing the offset will change the
+  // decryption of the data
+  SECTION("Doesn't cause data to get corrupted") {
+    container.SetOffset(200);
+
+    CheckForValidData(container);
   }
 }

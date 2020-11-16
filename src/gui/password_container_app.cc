@@ -34,7 +34,6 @@ void PasswordContainerApp::draw() {
 void PasswordContainerApp::update() {
   if (button_pressed_) {
     counter_++;
-    button_pressed_ = false;
   }
 }
 

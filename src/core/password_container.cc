@@ -24,6 +24,14 @@ void PasswordContainer::SetKey(const std::string& new_key) {
   key_ = new_key;
 }
 
+void PasswordContainer::SetOffset(size_t offset) {
+  if (offset < kMinimumCharacterOffset) {
+    throw std::invalid_argument("The passed in offset is too small.");
+  }
+
+  character_offset_ = offset;
+}
+
 std::istream &operator>>(std::istream& input, PasswordContainer& container) {
   // Code to get all data from the input file found here:
   // https://stackoverflow.com/questions/3203452/how-to-read-entire-stream-into-a-stdstring

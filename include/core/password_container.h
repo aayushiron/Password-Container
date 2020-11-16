@@ -36,8 +36,13 @@ class PasswordContainer {
   // loaded in accounts.
   std::vector<AccountDetails> GetAccounts() const;
 
-  // Sets the key to the passed in value
+  // Sets the key to the passed in value. Throws an invalid_argument exception
+  // if the passed in key is empty.
   void SetKey(const std::string& new_key);
+
+  // Sets the character_offset to the passed in value. Throws an
+  // invalid_argument exception if offset is lower than the minimum offset.
+  void SetOffset(size_t offset);
 
   // Overloaded >> operator used to read in a file of encrypted username and
   // password data.
