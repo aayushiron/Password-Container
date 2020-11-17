@@ -1,4 +1,6 @@
 #include "core/password_container.h"
+#include "core/util.h"
+
 #include <sstream>
 
 using std::string;
@@ -107,7 +109,7 @@ string PasswordContainer::DecryptString(const string& str) const {
   for (size_t index = 0; index < str.size(); index += kEncryptedCharacterLength) {
     // Gets the int ASCII representation of the char
     string encrypted_char = str.substr(index, kEncryptedCharacterLength);
-    int char_int_representation = ConvertStringToInt(encrypted_char) - offset;
+    int char_int_representation = util::ConvertStringToInt(encrypted_char) - offset;
 
     // Makes sure the encrypted char strings actually refers to a char
     if (!IsValidChar(char_int_representation)) {
@@ -230,22 +232,6 @@ bool PasswordContainer::IsValidChar(int int_representation) const {
   // character, or any character in the ASCII range of ' ' to '~'
   return int_representation == '\t' || int_representation == '\n' ||
          (int_representation >= ' ' && int_representation <= '~');
-}
-
-int PasswordContainer::ConvertStringToInt(
-    const string& to_convert) const {
-  // Creates a new string stream and puts the passed in string into the string
-  // stream
-  std::stringstream string_stream;
-  string_stream << to_convert;
-
-  // Makes sure that the passed in string can be converted to an int
-  int asInt;
-  if (!(string_stream >> asInt)) {
-    throw std::invalid_argument("Cannot convert\"" + to_convert + "\"to int.");
-  }
-
-  return asInt;
 }
 
 }  // namespace passwordcontainer

@@ -40,12 +40,12 @@ get_filename_component(APP_PATH "${CMAKE_CURRENT_SOURCE_DIR}/" ABSOLUTE)
 
 include("${CINDER_PATH}/proj/cmake/modules/cinderMakeApp.cmake")
 
-list(APPEND CORE_SOURCE_FILES src/core/password_container.cc)
+list(APPEND CORE_SOURCE_FILES src/core/password_container.cc src/core/util.cc)
 
 list(APPEND SOURCE_FILES    ${CORE_SOURCE_FILES}
         src/gui/password_container_app.cc)
 
-list(APPEND TEST_FILES tests/test_password_container.cc)
+list(APPEND TEST_FILES tests/test_password_container.cc tests/test_util.cc)
 
 ci_make_app(
         APP_NAME        password-container-app

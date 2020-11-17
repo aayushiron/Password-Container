@@ -134,14 +134,6 @@ class PasswordContainer {
   // by the passed in account_name.
   std::vector<AccountDetails>::iterator FindIterator(const std::string& account_name);
 
-  // Converts the passed in string to an int.
-  //
-  // Takes in a string to_convert that is the string to be converted to an int.
-  //
-  // Throws an invalid_argument exception if the string cannot be converted to
-  // an int.
-  int ConvertStringToInt(const std::string& to_convert) const;
-
   // Finds out whether the passed in int represents a valid char or not
   bool IsValidChar(int int_representation) const;
 };
