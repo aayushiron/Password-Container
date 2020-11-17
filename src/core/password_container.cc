@@ -1,7 +1,8 @@
 #include "core/password_container.h"
-#include "core/util.h"
 
 #include <sstream>
+
+#include "core/util.h"
 
 using std::string;
 using std::vector;
@@ -17,7 +18,8 @@ PasswordContainer::PasswordContainer(size_t offset, const string& key) {
   key_ = key;
 }
 
-vector<PasswordContainer::AccountDetails> PasswordContainer::GetAccounts() const {
+vector<PasswordContainer::AccountDetails> PasswordContainer::GetAccounts()
+    const {
   return accounts_;
 }
 
@@ -83,7 +85,7 @@ void PasswordContainer::ModifyAccount(const std::string& account_name,
   account->password = password;
 }
 
-std::istream &operator>>(std::istream& input, PasswordContainer& container) {
+std::istream& operator>>(std::istream& input, PasswordContainer& container) {
   // Code to get all data from the input file found here:
   // https://stackoverflow.com/questions/3203452/how-to-read-entire-stream-into-a-stdstring
   string encrypted_string(std::istreambuf_iterator<char>(input), {});
@@ -94,7 +96,8 @@ std::istream &operator>>(std::istream& input, PasswordContainer& container) {
   return input;
 }
 
-std::ostream &operator<<(std::ostream& output, const PasswordContainer& container) {
+std::ostream& operator<<(std::ostream& output,
+                         const PasswordContainer& container) {
   string data_representation = container.GenerateStringRepresentation();
   output << container.EncryptString(data_representation);
 
@@ -106,10 +109,12 @@ string PasswordContainer::DecryptString(const string& str) const {
   string decrypted_string;
 
   // Loops through every encrypted character in the passed in string
-  for (size_t index = 0; index < str.size(); index += kEncryptedCharacterLength) {
+  for (size_t index = 0; index < str.size();
+       index += kEncryptedCharacterLength) {
     // Gets the int ASCII representation of the char
     string encrypted_char = str.substr(index, kEncryptedCharacterLength);
-    int char_int_representation = util::ConvertStringToInt(encrypted_char) - offset;
+    int char_int_representation =
+        util::ConvertStringToInt(encrypted_char) - offset;
 
     // Makes sure the encrypted char strings actually refers to a char
     if (!IsValidChar(char_int_representation)) {
@@ -140,9 +145,8 @@ string PasswordContainer::GenerateStringRepresentation() const {
 
   // Loops through all accounts and adds their details to the final string
   for (const AccountDetails& account : accounts_) {
-    string_representation += account.name + '\t' +
-                             account.username + '\t' +
-                             account.password + '\n';
+    string_representation +=
+        account.name + '\t' + account.username + '\t' + account.password + '\n';
   }
 
   // Removes the trailing \n character from the string
@@ -166,7 +170,7 @@ void PasswordContainer::AddAllData(const string& decrypted_string) {
 void PasswordContainer::AddOneAccountData(const string& line_data) {
   string current_detail;
   std::stringstream line_stream(line_data);
-  AccountDetails current_account; // Creates a new AccountDetails object
+  AccountDetails current_account;  // Creates a new AccountDetails object
 
   // Loops through all data in the current line
   for (size_t detail_index = 0; detail_index < kNumDetails; detail_index++) {
@@ -216,9 +220,10 @@ bool PasswordContainer::HasAccount(const std::string& account_name) {
   return false;
 }
 
-std::vector<PasswordContainer::AccountDetails>::iterator PasswordContainer::FindIterator(
-    const std::string& account_name) {
-  for (auto iterator = accounts_.begin(); iterator != accounts_.end(); iterator++) {
+std::vector<PasswordContainer::AccountDetails>::iterator
+PasswordContainer::FindIterator(const std::string& account_name) {
+  for (auto iterator = accounts_.begin(); iterator != accounts_.end();
+       iterator++) {
     if (iterator->name == account_name) {
       return iterator;
     }

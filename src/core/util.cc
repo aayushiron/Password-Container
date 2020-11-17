@@ -1,7 +1,7 @@
 #include "core/util.h"
 
-#include <string>
 #include <sstream>
+#include <string>
 
 namespace util {
 
@@ -20,4 +20,4 @@ int ConvertStringToInt(const std::string& to_convert) {
   return asInt;
 }
 
-}
+}  // namespace util

@@ -2,8 +2,8 @@
 #define CORE_PASSWORD_CONTAINER_H
 
 #include <iostream>
-#include <vector>
 #include <string>
+#include <vector>
 
 namespace passwordcontainer {
 
@@ -73,7 +73,7 @@ class PasswordContainer {
   // Takes in an istream called input that represents the input that contains
   // data for the encrypted data. Also takes in a PasswordContainer called
   // container that is the container where the data is being loaded into.
-  friend std::istream &operator>>(std::istream& input,
+  friend std::istream& operator>>(std::istream& input,
                                   PasswordContainer& container);
 
   // Overloaded << operator that is used to output a string that represents
@@ -82,7 +82,7 @@ class PasswordContainer {
   // Takes in an ostream called output that represents the output of the
   // container. Also takes in a PasswordContainer called container that is the
   // container that is the container where data is being read from.
-  friend std::ostream &operator<<(std::ostream& output,
+  friend std::ostream& operator<<(std::ostream& output,
                                   const PasswordContainer& container);
 
  private:
@@ -132,7 +132,8 @@ class PasswordContainer {
 
   // Finds the iterator that refers to the AccountDetails object is referred to
   // by the passed in account_name.
-  std::vector<AccountDetails>::iterator FindIterator(const std::string& account_name);
+  std::vector<AccountDetails>::iterator FindIterator(
+      const std::string& account_name);
 
   // Finds out whether the passed in int represents a valid char or not
   bool IsValidChar(int int_representation) const;

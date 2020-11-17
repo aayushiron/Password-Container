@@ -16,6 +16,7 @@ TEST_CASE("Tests for ConvertStringToInt") {
   }
 
   SECTION("Throws error for string with non integer characters") {
-    REQUIRE_THROWS_AS(util::ConvertStringToInt("ascii1"), std::invalid_argument);
+    REQUIRE_THROWS_AS(util::ConvertStringToInt("ascii1"),
+                      std::invalid_argument);
   }
 }

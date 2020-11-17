@@ -1,10 +1,10 @@
 #ifndef GUI_PASSWORD_CONTAINER_MAIN_H
 #define GUI_PASSWORD_CONTAINER_MAIN_H
 
+#include <CinderImGui.h>
 #include <cinder/app/App.h>
 #include <cinder/app/RendererGl.h>
 #include <cinder/gl/gl.h>
-#include <CinderImGui.h>
 
 namespace passwordcontainer {
 
@@ -33,4 +33,4 @@ class PasswordContainerApp : public ci::app::App {
 
 }  // namespace passwordcontainer
 
-#endif //GUI_PASSWORD_CONTAINER_MAIN_H
+#endif  // GUI_PASSWORD_CONTAINER_MAIN_H

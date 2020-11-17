@@ -1,8 +1,8 @@
 #include <catch2/catch.hpp>
-
-#include "core/password_container.h"
 #include <fstream>
 #include <sstream>
+
+#include "core/password_container.h"
 
 using passwordcontainer::PasswordContainer;
 using std::ifstream;
@@ -90,10 +90,13 @@ TEST_CASE("Tests for overloaded << operator") {
     stringstream stream;
     stream << container;
 
-    std::string correct_data = "26630030031231831131725021028631630231531129831"
+    std::string correct_data =
+        "26630030031231831131725021028631630231531129831"
         "0302250210281298316316320312315301250211266300300312318311317251210286"
-        "31630231531129831030225121028129831631632031231530125121126630030031231"
-        "8311317252210286316302315311298310302252210281298316316320312315301252";
+        "3163023153112983103022512102812983163163203123153012512112663003003123"
+        "1"
+        "831131725221028631630231531129831030225221028129831631632031231530125"
+        "2";
 
     REQUIRE(stream.str() == correct_data);
   }
@@ -103,10 +106,12 @@ TEST_CASE("Tests for overloaded << operator") {
     stringstream stream;
     stream << container;
 
-    std::string correct_data = "26529929931131731031624920928531530131431029730"
+    std::string correct_data =
+        "26529929931131731031624920928531530131431029730"
         "9301249209280297315315319311314300249210265299299311317310316250209285"
         "3153013143102973093012502092802973153153193113143002502102652992993113"
-        "17310316251209285315301314310297309301251209280297315315319311314300251";
+        "1731031625120928531530131431029730930125120928029731531531931131430025"
+        "1";
 
     REQUIRE(stream.str() == correct_data);
   }
@@ -116,10 +121,12 @@ TEST_CASE("Tests for overloaded << operator") {
     stringstream stream;
     stream << container;
 
-    std::string correct_data = "36640040041241841141735031038641640241541139841"
+    std::string correct_data =
+        "36640040041241841141735031038641640241541139841"
         "0402350310381398416416420412415401350311366400400412418411417351310386"
         "4164024154113984104023513103813984164164204124154013513113664004004124"
-        "18411417352310386416402415411398410402352310381398416416420412415401352";
+        "1841141735231038641640241541139841040235231038139841641642041241540135"
+        "2";
 
     REQUIRE(stream.str() == correct_data);
   }
@@ -182,7 +189,8 @@ TEST_CASE("Tests for AddAccount") {
   PasswordContainer container(100, "CorrectKey");
 
   SECTION("Adds account to empty container") {
-    REQUIRE_NOTHROW(container.AddAccount("NewAccount", "NewUsername", "NewPassword"));
+    REQUIRE_NOTHROW(
+        container.AddAccount("NewAccount", "NewUsername", "NewPassword"));
 
     SECTION("Account name is correct") {
       REQUIRE(container.GetAccounts()[0].name == "NewAccount");
@@ -201,7 +209,8 @@ TEST_CASE("Tests for AddAccount") {
   file >> container;
 
   SECTION("Adds account to container with values") {
-    REQUIRE_NOTHROW(container.AddAccount("NewAccount", "NewUsername", "NewPassword"));
+    REQUIRE_NOTHROW(
+        container.AddAccount("NewAccount", "NewUsername", "NewPassword"));
 
     SECTION("Doesn't change previous data") {
       CheckForValidData(container);
@@ -222,19 +231,23 @@ TEST_CASE("Tests for AddAccount") {
 
   SECTION("Throws error when adding invalid accounts") {
     SECTION("Account with the passed in name already exists") {
-      REQUIRE_THROWS_AS(container.AddAccount("Account1", "user", "pass"), std::invalid_argument);
+      REQUIRE_THROWS_AS(container.AddAccount("Account1", "user", "pass"),
+                        std::invalid_argument);
     }
 
     SECTION("Account with empty name throws error") {
-      REQUIRE_THROWS_AS(container.AddAccount("", "user", "pass"), std::invalid_argument);
+      REQUIRE_THROWS_AS(container.AddAccount("", "user", "pass"),
+                        std::invalid_argument);
     }
 
     SECTION("Account with empty username throws error") {
-      REQUIRE_THROWS_AS(container.AddAccount("acc_name", "", "pass"), std::invalid_argument);
+      REQUIRE_THROWS_AS(container.AddAccount("acc_name", "", "pass"),
+                        std::invalid_argument);
     }
 
     SECTION("Account with empty password throws error") {
-      REQUIRE_THROWS_AS(container.AddAccount("acc_name", "user", ""), std::invalid_argument);
+      REQUIRE_THROWS_AS(container.AddAccount("acc_name", "user", ""),
+                        std::invalid_argument);
     }
   }
 }
@@ -243,7 +256,8 @@ TEST_CASE("Tests for DeleteAccount") {
   PasswordContainer container(100, "CorrectKey");
 
   SECTION("Throws error when deleting account from empty container") {
-    REQUIRE_THROWS_AS(container.DeleteAccount("Account1"), std::invalid_argument);
+    REQUIRE_THROWS_AS(container.DeleteAccount("Account1"),
+                      std::invalid_argument);
   }
 
   ifstream file("../../../tests/resources/Data.pwords");
@@ -274,7 +288,8 @@ TEST_CASE("Tests for DeleteAccount") {
 
   SECTION("Throws error when deleting invalid accounts") {
     SECTION("Account with the passed in name doesn't exists") {
-      REQUIRE_THROWS_AS(container.DeleteAccount("RandomUsername"), std::invalid_argument);
+      REQUIRE_THROWS_AS(container.DeleteAccount("RandomUsername"),
+                        std::invalid_argument);
     }
 
     SECTION("Account with empty name throws error") {
@@ -287,7 +302,8 @@ TEST_CASE("Tests for ModifyAccount") {
   PasswordContainer container(100, "CorrectKey");
 
   SECTION("Throws error when Modifying account from empty container") {
-    REQUIRE_THROWS_AS(container.ModifyAccount("Account1", "NewUser", "NewPass"), std::invalid_argument);
+    REQUIRE_THROWS_AS(container.ModifyAccount("Account1", "NewUser", "NewPass"),
+                      std::invalid_argument);
   }
 
   ifstream file("../../../tests/resources/Data.pwords");
@@ -315,19 +331,23 @@ TEST_CASE("Tests for ModifyAccount") {
 
   SECTION("Throws error when Modifying invalid accounts") {
     SECTION("Account with the passed in name doesn't exists") {
-      REQUIRE_THROWS_AS(container.DeleteAccount("RandomUsername"), std::invalid_argument);
+      REQUIRE_THROWS_AS(container.DeleteAccount("RandomUsername"),
+                        std::invalid_argument);
     }
 
     SECTION("Account with empty name throws error") {
-      REQUIRE_THROWS_AS(container.ModifyAccount("", "user", "pass"), std::invalid_argument);
+      REQUIRE_THROWS_AS(container.ModifyAccount("", "user", "pass"),
+                        std::invalid_argument);
     }
 
     SECTION("Account with empty username throws error") {
-      REQUIRE_THROWS_AS(container.ModifyAccount("name", "", "pass"), std::invalid_argument);
+      REQUIRE_THROWS_AS(container.ModifyAccount("name", "", "pass"),
+                        std::invalid_argument);
     }
 
     SECTION("Account with empty password throws error") {
-      REQUIRE_THROWS_AS(container.ModifyAccount("name", "", "pass"), std::invalid_argument);
+      REQUIRE_THROWS_AS(container.ModifyAccount("name", "", "pass"),
+                        std::invalid_argument);
     }
   }
 }

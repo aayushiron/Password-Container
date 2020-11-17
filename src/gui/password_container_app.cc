@@ -7,7 +7,7 @@ namespace passwordcontainer {
 namespace gui {
 
 PasswordContainerApp::PasswordContainerApp() {
-  ci::app::setWindowSize((int) kWindowSize, (int) kWindowSize);
+  ci::app::setWindowSize((int)kWindowSize, (int)kWindowSize);
   button_pressed_ = false;
   counter_ = 0;
 }
@@ -27,7 +27,7 @@ void PasswordContainerApp::draw() {
   // Adds the counter text and button
   std::string counter_text = "Counter: " + std::to_string(counter_);
   ui::Text("%s", counter_text.c_str());
-  button_pressed_ = ui::Button( "Add 1" );
+  button_pressed_ = ui::Button("Add 1");
   ui::End();
 }
 
