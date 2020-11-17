@@ -44,6 +44,27 @@ class PasswordContainer {
   // invalid_argument exception if offset is lower than the minimum offset.
   void SetOffset(size_t offset);
 
+  // Adds a new account with the passed in account_name, username, and password.
+  //
+  // Throws an invalid_argument exception if account_name, username, or password
+  // are empty. Also throws an invalid_argument exception if there is already an
+  // account with account_name.
+  void AddAccount(std::string account_name, std::string username, std::string password);
+
+  // Deletes the account with the passed in account_name.
+  //
+  // Throws an invalid_argument exception if there is no account with the passed
+  // in account_name.
+  void DeleteAccount(std::string account_name);
+
+  // Modifies the account with the passed in account_name to have the passed in
+  // username and password.
+  //
+  // Throws an invalid_argument exception if there is no account with the passed
+  // in account name. Also throws the exception if the username or password is
+  // empty.
+  void ModifyAccount(std::string account_name, std::string username, std::string password);
+
   // Overloaded >> operator used to read in a file of encrypted username and
   // password data.
   //
