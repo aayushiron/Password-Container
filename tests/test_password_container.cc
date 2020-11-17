@@ -12,10 +12,6 @@ void CheckForValidData(const PasswordContainer& container) {
   std::vector<PasswordContainer::AccountDetails> accounts =
       container.GetAccounts();
 
-  SECTION("Has correct number of accounts") {
-    REQUIRE(container.GetAccounts().size() == 3);
-  }
-
   SECTION("Has correct data for first account") {
     REQUIRE(accounts[0].name == "Account1");
     REQUIRE(accounts[0].username == "Username1");
@@ -266,13 +262,13 @@ TEST_CASE("Tests for DeleteAccount") {
     }
 
     SECTION("Remaining usernames are correct") {
-      REQUIRE(container.GetAccounts()[0].name == "Username2");
-      REQUIRE(container.GetAccounts()[1].name == "Username3");
+      REQUIRE(container.GetAccounts()[0].username == "Username2");
+      REQUIRE(container.GetAccounts()[1].username == "Username3");
     }
 
     SECTION("Remaining passwords are correct") {
-      REQUIRE(container.GetAccounts()[0].name == "Password2");
-      REQUIRE(container.GetAccounts()[1].name == "Password3");
+      REQUIRE(container.GetAccounts()[0].password == "Password2");
+      REQUIRE(container.GetAccounts()[1].password == "Password3");
     }
   }
 
@@ -309,11 +305,11 @@ TEST_CASE("Tests for ModifyAccount") {
     }
 
     SECTION("Remaining usernames are correct") {
-      REQUIRE(container.GetAccounts()[0].name == "NewUser");
+      REQUIRE(container.GetAccounts()[0].username == "NewUser");
     }
 
     SECTION("Remaining passwords are correct") {
-      REQUIRE(container.GetAccounts()[0].name == "NewUser");
+      REQUIRE(container.GetAccounts()[0].password == "NewPass");
     }
   }
 

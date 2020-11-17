@@ -49,13 +49,14 @@ class PasswordContainer {
   // Throws an invalid_argument exception if account_name, username, or password
   // are empty. Also throws an invalid_argument exception if there is already an
   // account with account_name.
-  void AddAccount(std::string account_name, std::string username, std::string password);
+  void AddAccount(const std::string& account_name, const std::string& username,
+                  const std::string& password);
 
   // Deletes the account with the passed in account_name.
   //
   // Throws an invalid_argument exception if there is no account with the passed
   // in account_name.
-  void DeleteAccount(std::string account_name);
+  void DeleteAccount(const std::string& account_name);
 
   // Modifies the account with the passed in account_name to have the passed in
   // username and password.
@@ -63,7 +64,8 @@ class PasswordContainer {
   // Throws an invalid_argument exception if there is no account with the passed
   // in account name. Also throws the exception if the username or password is
   // empty.
-  void ModifyAccount(std::string account_name, std::string username, std::string password);
+  void ModifyAccount(const std::string& account_name,
+                     const std::string& username, const std::string& password);
 
   // Overloaded >> operator used to read in a file of encrypted username and
   // password data.
@@ -123,6 +125,14 @@ class PasswordContainer {
   // Calculates the real offset that is used for encryption using the current
   // character_offset_ and key_.
   size_t CalculateRealOffset() const;
+
+  // Returns a boolean that signifies whether there is an account with the
+  // passed in account_name in the file.
+  bool HasAccount(const std::string& account_name);
+
+  // Finds the iterator that refers to the AccountDetails object is referred to
+  // by the passed in account_name.
+  std::vector<AccountDetails>::iterator FindIterator(const std::string& account_name);
 
   // Converts the passed in string to an int.
   //
