@@ -182,13 +182,13 @@ void PasswordContainer::AddOneAccountData(const string& line_data) {
     // Adds the information to the AccountDetails based on what detail the
     // program currently is on
     switch (detail_index) {
-      case 0:
+      case kAccountNameIndex:
         current_account.name = current_detail;
         break;
-      case 1:
+      case kUsernameIndex:
         current_account.username = current_detail;
         break;
-      case 2:
+      case kPasswordIndex:
         current_account.password = current_detail;
         break;
     }

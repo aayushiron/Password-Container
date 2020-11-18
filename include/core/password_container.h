@@ -88,6 +88,15 @@ class PasswordContainer {
  private:
   const size_t kMinimumCharacterOffset = 100;
 
+  // Enum that stores values for the index value of how details are stored in
+  // a file (There is the account name, then username, then password in the save
+  // file).
+  enum DetailIndex {
+    kAccountNameIndex = 0,
+    kUsernameIndex = 1,
+    kPasswordIndex = 2
+  };
+
   // The length that 1 encrypted character has in a file
   const size_t kEncryptedCharacterLength = 3;
 
