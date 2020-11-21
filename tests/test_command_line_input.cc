@@ -18,15 +18,15 @@ bool HasValidData(const PasswordContainer& container) {
   std::vector<PasswordContainer::AccountDetails> accounts =
       container.GetAccounts();
 
-  bool correct_first_account = accounts[0].name == "Account1" &&
+  bool correct_first_account = accounts[0].account_name == "Account1" &&
                                accounts[0].username == "Username1" &&
                                accounts[0].password == "Password1";
 
-  bool correct_second_account = accounts[1].name == "Account2" &&
+  bool correct_second_account = accounts[1].account_name == "Account2" &&
                                 accounts[1].username == "Username2" &&
                                 accounts[1].password == "Password2";
 
-  bool correct_third_account = accounts[2].name == "Account3" &&
+  bool correct_third_account = accounts[2].account_name == "Account3" &&
                                accounts[2].username == "Username3" &&
                                accounts[2].password == "Password3";
 
@@ -73,7 +73,7 @@ TEST_CASE("Tests for HandleSingleCommand with an empty container") {
     REQUIRE(cli.HandleSingleCommand());
 
     REQUIRE(cli.GetContainer().GetAccounts().size() == 1);
-    REQUIRE(cli.GetContainer().GetAccounts()[0].name == "Account1");
+    REQUIRE(cli.GetContainer().GetAccounts()[0].account_name == "Account1");
     REQUIRE(cli.GetContainer().GetAccounts()[0].username == "Username1");
     REQUIRE(cli.GetContainer().GetAccounts()[0].password == "Password1");
   }
@@ -83,8 +83,8 @@ TEST_CASE("Tests for HandleSingleCommand with an empty container") {
              "Account1";
     REQUIRE(cli.HandleSingleCommand());
 
-    REQUIRE(output.str() == "Please enter the Account Name: "
-                            "That account does not exist!");
+    REQUIRE(output.str() == "> Please enter the Account Name: "
+                            "That account does not exist!\n\n");
     REQUIRE(cli.GetContainer().GetAccounts().size() == 0);
   }
 
@@ -93,8 +93,8 @@ TEST_CASE("Tests for HandleSingleCommand with an empty container") {
              "Account1";
     REQUIRE(cli.HandleSingleCommand());
 
-    REQUIRE(output.str() == "Please enter the Account Name: "
-                            "That account does not exist!");
+    REQUIRE(output.str() == "> Please enter the Account Name: "
+                            "That account does not exist!\n\n");
     REQUIRE(cli.GetContainer().GetAccounts().size() == 0);
   }
 
@@ -102,7 +102,7 @@ TEST_CASE("Tests for HandleSingleCommand with an empty container") {
     input << "list accounts\n";
     REQUIRE(cli.HandleSingleCommand());
 
-    REQUIRE(output.str() == "\n");
+    REQUIRE(output.str() == "> \n");
     REQUIRE(cli.GetContainer().GetAccounts().size() == 0);
   }
 
@@ -111,8 +111,8 @@ TEST_CASE("Tests for HandleSingleCommand with an empty container") {
              "Account1";
     REQUIRE(cli.HandleSingleCommand());
 
-    REQUIRE(output.str() == "Please enter the Account Name: "
-                            "That account does not exist!");
+    REQUIRE(output.str() == "> Please enter the account name: "
+                            "That account does not exist!\n\n");
     REQUIRE(cli.GetContainer().GetAccounts().size() == 0);
   }
 
@@ -155,7 +155,7 @@ TEST_CASE("Tests for HandleSingleCommand with a populated container") {
     REQUIRE(cli.HandleSingleCommand());
 
     REQUIRE(cli.GetContainer().GetAccounts().size() == 4);
-    REQUIRE(cli.GetContainer().GetAccounts()[3].name == "Account4");
+    REQUIRE(cli.GetContainer().GetAccounts()[3].account_name == "Account4");
     REQUIRE(cli.GetContainer().GetAccounts()[3].username == "Username4");
     REQUIRE(cli.GetContainer().GetAccounts()[3].password == "Password4");
   }
@@ -166,11 +166,11 @@ TEST_CASE("Tests for HandleSingleCommand with a populated container") {
     REQUIRE(cli.HandleSingleCommand());
 
     REQUIRE(cli.GetContainer().GetAccounts().size() == 2);
-    REQUIRE(cli.GetContainer().GetAccounts()[0].name == "Account2");
+    REQUIRE(cli.GetContainer().GetAccounts()[0].account_name == "Account2");
     REQUIRE(cli.GetContainer().GetAccounts()[0].username == "Username2");
     REQUIRE(cli.GetContainer().GetAccounts()[0].password == "Password2");
 
-    REQUIRE(cli.GetContainer().GetAccounts()[1].name == "Account3");
+    REQUIRE(cli.GetContainer().GetAccounts()[1].account_name == "Account3");
     REQUIRE(cli.GetContainer().GetAccounts()[1].username == "Username3");
     REQUIRE(cli.GetContainer().GetAccounts()[1].password == "Password3");
   }
@@ -183,24 +183,25 @@ TEST_CASE("Tests for HandleSingleCommand with a populated container") {
     REQUIRE(cli.HandleSingleCommand());
 
     REQUIRE(cli.GetContainer().GetAccounts().size() == 3);
-    REQUIRE(cli.GetContainer().GetAccounts()[0].name == "Account1");
+    REQUIRE(cli.GetContainer().GetAccounts()[0].account_name == "Account1");
     REQUIRE(cli.GetContainer().GetAccounts()[0].username == "NewUsername");
     REQUIRE(cli.GetContainer().GetAccounts()[0].password == "NewPassword");
 
-    REQUIRE(cli.GetContainer().GetAccounts()[1].name == "Account2");
+    REQUIRE(cli.GetContainer().GetAccounts()[1].account_name == "Account2");
     REQUIRE(cli.GetContainer().GetAccounts()[1].username == "Username2");
     REQUIRE(cli.GetContainer().GetAccounts()[1].password == "Password2");
 
-    REQUIRE(cli.GetContainer().GetAccounts()[2].name == "Account3");
+    REQUIRE(cli.GetContainer().GetAccounts()[2].account_name == "Account3");
     REQUIRE(cli.GetContainer().GetAccounts()[2].username == "Username3");
     REQUIRE(cli.GetContainer().GetAccounts()[2].password == "Password3");
   }
 
   SECTION("List accounts lists out all accounts") {
     input << "list accounts\n";
-    REQUIRE(cli.HandleSingleCommand());
+    //REQUIRE(cli.HandleSingleCommand());
+    cli.HandleSingleCommand();
 
-    REQUIRE(output.str() == "Account1\n"
+    REQUIRE(output.str() == "> Account1\n"
                             "Account2\n"
                             "Account3\n\n");
   }
@@ -210,7 +211,7 @@ TEST_CASE("Tests for HandleSingleCommand with a populated container") {
              "Account1\n";
     REQUIRE(cli.HandleSingleCommand());
 
-    REQUIRE(output.str() == "Please enter the Account Name: "
+    REQUIRE(output.str() == "> Please enter the account name: "
                             "Username: Username1\n"
                             "Password: Password1\n\n");
   }
@@ -219,7 +220,7 @@ TEST_CASE("Tests for HandleSingleCommand with a populated container") {
     input << "save\n";
     REQUIRE(cli.HandleSingleCommand());
 
-    std::ifstream save_file("../../../tests/resources/BlankData.pwords");
+    std::ifstream save_file("../../../tests/resources/Data.pwords");
     // Code to get all data from the input file found here:
     // https://stackoverflow.com/questions/3203452/how-to-read-entire-stream-into-a-stdstring
     string file_data(std::istreambuf_iterator<char>(save_file), {});
@@ -257,7 +258,7 @@ TEST_CASE("Tests for HandleSingleCommand with invalid commands") {
     input << "invalid command\n";
     REQUIRE(cli.HandleSingleCommand());
 
-    REQUIRE(output.str() == "Invalid Command!\n\n");
+    REQUIRE(output.str() == "> Invalid Command!\n\n");
   }
   
   SECTION("Only accepts non-empty strings for main command parameters") {
@@ -278,7 +279,7 @@ TEST_CASE("Tests for HandleSingleCommand with invalid commands") {
     REQUIRE(cli.HandleSingleCommand());
 
     REQUIRE(cli.GetContainer().GetAccounts().size() == 4);
-    REQUIRE(cli.GetContainer().GetAccounts()[3].name == "Account4");
+    REQUIRE(cli.GetContainer().GetAccounts()[3].account_name == "Account4");
     REQUIRE(cli.GetContainer().GetAccounts()[3].username == "Username4");
     REQUIRE(cli.GetContainer().GetAccounts()[3].password == "Password4");
   }
@@ -303,7 +304,7 @@ TEST_CASE("Tests for HandleSingleCommand with invalid commands") {
     REQUIRE(cli.HandleSingleCommand());
 
     REQUIRE(cli.GetContainer().GetAccounts().size() == 3);
-    REQUIRE(cli.GetContainer().GetAccounts()[0].name == "Account1");
+    REQUIRE(cli.GetContainer().GetAccounts()[0].account_name == "Account1");
     REQUIRE(cli.GetContainer().GetAccounts()[0].username == "NewUsername");
     REQUIRE(cli.GetContainer().GetAccounts()[0].password == "NewPassword");
   }
@@ -314,7 +315,8 @@ TEST_CASE("Tests for HandleSingleCommand with invalid commands") {
              "Account1\n";
     REQUIRE(cli.HandleSingleCommand());
 
-    REQUIRE(output.str() == "Please enter the Account Name: "
+    REQUIRE(output.str() == "> Please enter the account name: "
+                            "Please enter the account name: "
                             "Username: Username1\n"
                             "Password: Password1\n\n");
   }

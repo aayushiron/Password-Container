@@ -26,7 +26,8 @@ class CommandLineInput {
   // called key that represents the key used to decrypt the string.
   //
   // Throws an invalid_argument exception if the container_location does not
-  // exist or has invalid data.
+  // exist or has invalid data. Also throws an invalid_argument exception if the
+  // key is invalid.
   CommandLineInput(std::istream& user_input, std::ostream& user_output,
                    const std::string& container_location, const std::string& key);
 
@@ -43,6 +44,8 @@ class CommandLineInput {
   PasswordContainer GetContainer() const;
 
  private:
+  const size_t kDefaultOffset = 100;
+
   // The input and output streams for the user input.
   std::istream& user_input_;
   std::ostream& user_output_;
@@ -66,8 +69,9 @@ class CommandLineInput {
   // Loads the container from the location specified in the container_location_
   // string. Uses the key passed into the function to load the container.
   // Throws an invalid_argument exception if there is no file at
-  // container_location_ or if the data is bad.
-  void LoadContainer(std::string key);
+  // container_location_ or if the data is bad or if the passed in key is
+  // invalid.
+  void LoadContainer(const std::string& key);
 
   // Saves the container to the location specified in the container_location_
   // string. Throws an invalid_argument exception if container_location_ is an
