@@ -21,7 +21,7 @@ class PasswordContainer {
   // use.
   struct AccountDetails {
     // The name (what website the account is for) of the account
-    std::string name;
+    std::string account_name;
     // The username and password of the account
     std::string username;
     std::string password;
@@ -69,6 +69,15 @@ class PasswordContainer {
   // empty.
   void ModifyAccount(const std::string& account_name,
                      const std::string& username, const std::string& password);
+
+  // Returns a boolean that signifies whether there is an account with the
+  // passed in account_name in the file.
+  bool HasAccount(const std::string& account_name);
+
+  // Finds the iterator that refers to the AccountDetails object is referred to
+  // by the passed in account_name.
+  std::vector<AccountDetails>::iterator FindAccount(
+      const std::string& account_name);
 
   // Overloaded >> operator used to read in a file of encrypted username and
   // password data.

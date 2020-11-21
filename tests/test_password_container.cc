@@ -13,19 +13,19 @@ void CheckForValidData(const PasswordContainer& container) {
       container.GetAccounts();
 
   SECTION("Has correct data for first account") {
-    REQUIRE(accounts[0].name == "Account1");
+    REQUIRE(accounts[0].account_name == "Account1");
     REQUIRE(accounts[0].username == "Username1");
     REQUIRE(accounts[0].password == "Password1");
   }
 
   SECTION("Has correct data for second account") {
-    REQUIRE(accounts[1].name == "Account2");
+    REQUIRE(accounts[1].account_name == "Account2");
     REQUIRE(accounts[1].username == "Username2");
     REQUIRE(accounts[1].password == "Password2");
   }
 
   SECTION("Has correct data for third account") {
-    REQUIRE(accounts[2].name == "Account3");
+    REQUIRE(accounts[2].account_name == "Account3");
     REQUIRE(accounts[2].username == "Username3");
     REQUIRE(accounts[2].password == "Password3");
   }
@@ -193,15 +193,15 @@ TEST_CASE("Tests for AddAccount") {
         container.AddAccount("NewAccount", "NewUsername", "NewPassword"));
 
     SECTION("Account name is correct") {
-      REQUIRE(container.GetAccounts()[0].name == "NewAccount");
+      REQUIRE(container.GetAccounts()[0].account_name == "NewAccount");
     }
 
     SECTION("Username is correct") {
-      REQUIRE(container.GetAccounts()[0].name == "NewAccount");
+      REQUIRE(container.GetAccounts()[0].account_name == "NewAccount");
     }
 
     SECTION("Password is correct") {
-      REQUIRE(container.GetAccounts()[0].name == "NewAccount");
+      REQUIRE(container.GetAccounts()[0].account_name == "NewAccount");
     }
   }
 
@@ -217,15 +217,15 @@ TEST_CASE("Tests for AddAccount") {
     }
 
     SECTION("New Account name is correct") {
-      REQUIRE(container.GetAccounts()[3].name == "NewAccount");
+      REQUIRE(container.GetAccounts()[3].account_name == "NewAccount");
     }
 
     SECTION("New Username is correct") {
-      REQUIRE(container.GetAccounts()[3].name == "NewAccount");
+      REQUIRE(container.GetAccounts()[3].account_name == "NewAccount");
     }
 
     SECTION("New Password is correct") {
-      REQUIRE(container.GetAccounts()[3].name == "NewAccount");
+      REQUIRE(container.GetAccounts()[3].account_name == "NewAccount");
     }
   }
 
@@ -271,8 +271,8 @@ TEST_CASE("Tests for DeleteAccount") {
     }
 
     SECTION("Remaining account names are correct") {
-      REQUIRE(container.GetAccounts()[0].name == "Account2");
-      REQUIRE(container.GetAccounts()[1].name == "Account3");
+      REQUIRE(container.GetAccounts()[0].account_name == "Account2");
+      REQUIRE(container.GetAccounts()[1].account_name == "Account3");
     }
 
     SECTION("Remaining usernames are correct") {
@@ -317,7 +317,7 @@ TEST_CASE("Tests for ModifyAccount") {
     }
 
     SECTION("Changed account name is correct") {
-      REQUIRE(container.GetAccounts()[0].name == "Account1");
+      REQUIRE(container.GetAccounts()[0].account_name == "Account1");
     }
 
     SECTION("Remaining usernames are correct") {
@@ -349,5 +349,32 @@ TEST_CASE("Tests for ModifyAccount") {
       REQUIRE_THROWS_AS(container.ModifyAccount("name", "", "pass"),
                         std::invalid_argument);
     }
+  }
+}
+
+TEST_CASE("Tests for HasAccount") {
+  PasswordContainer container(100, "CorrectKey");
+  ifstream file("../../../tests/resources/Data.pwords");
+  file >> container;
+
+  SECTION("Returns true when the container has the account") {
+    REQUIRE(container.HasAccount("Account1"));
+  }
+
+  SECTION("Returns false when the container doesn't have the account") {
+    REQUIRE_FALSE(container.HasAccount("RandomAccount"));
+  }
+}
+
+TEST_CASE("Tests for FindAccount") {
+  PasswordContainer container(100, "CorrectKey");
+  ifstream file("../../../tests/resources/Data.pwords");
+  file >> container;
+
+  SECTION("Returns correct element iterator for account that exists") {
+    PasswordContainer::AccountDetails account = *container.FindAccount("Account1");
+    REQUIRE(account.account_name == "Account1");
+    REQUIRE(account.username == "Username1");
+    REQUIRE(account.password == "Password1");
   }
 }

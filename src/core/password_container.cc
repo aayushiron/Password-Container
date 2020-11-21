@@ -56,7 +56,7 @@ void PasswordContainer::AddAccount(const string& account_name,
 
   // Creates and adds the new account to the rest of the accounts
   AccountDetails new_account;
-  new_account.name = account_name;
+  new_account.account_name = account_name;
   new_account.username = username;
   new_account.password = password;
   accounts_.push_back(new_account);
@@ -68,7 +68,7 @@ void PasswordContainer::DeleteAccount(const string& account_name) {
   }
 
   // Erases the object with the passed in account_name
-  auto account_iterator = FindIterator(account_name);
+  auto account_iterator = FindAccount(account_name);
   accounts_.erase(account_iterator);
 }
 
@@ -84,7 +84,7 @@ void PasswordContainer::ModifyAccount(const std::string& account_name,
   }
 
   // Changes the username and password of the account with account_name
-  auto account = FindIterator(account_name);
+  auto account = FindAccount(account_name);
   account->username = username;
   account->password = password;
 }
@@ -150,7 +150,7 @@ string PasswordContainer::GenerateStringRepresentation() const {
   // Loops through all accounts and adds their details to the final string
   for (const AccountDetails& account : accounts_) {
     string_representation +=
-        account.name + '\t' + account.username + '\t' + account.password + '\n';
+        account.account_name + '\t' + account.username + '\t' + account.password + '\n';
   }
 
   // Removes the trailing \n character from the string
@@ -187,7 +187,7 @@ void PasswordContainer::AddOneAccountData(const string& line_data) {
     // program currently is on
     switch (detail_index) {
       case kAccountNameIndex:
-        current_account.name = current_detail;
+        current_account.account_name = current_detail;
         break;
       case kUsernameIndex:
         current_account.username = current_detail;
@@ -216,7 +216,7 @@ size_t PasswordContainer::CalculateRealOffset() const {
 bool PasswordContainer::HasAccount(const std::string& account_name) {
   // Loops through all accounts and check if the name is equal to account_name
   for (const AccountDetails& account : accounts_) {
-    if (account.name == account_name) {
+    if (account.account_name == account_name) {
       return true;
     }
   }
@@ -225,10 +225,10 @@ bool PasswordContainer::HasAccount(const std::string& account_name) {
 }
 
 std::vector<PasswordContainer::AccountDetails>::iterator
-PasswordContainer::FindIterator(const std::string& account_name) {
+PasswordContainer::FindAccount(const std::string& account_name) {
   for (auto iterator = accounts_.begin(); iterator != accounts_.end();
        iterator++) {
-    if (iterator->name == account_name) {
+    if (iterator->account_name == account_name) {
       return iterator;
     }
   }
