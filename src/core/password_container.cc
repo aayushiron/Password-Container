@@ -31,6 +31,10 @@ void PasswordContainer::SetKey(const string& new_key) {
   key_ = new_key;
 }
 
+std::string PasswordContainer::GetKey() const {
+  return key_;
+}
+
 void PasswordContainer::SetOffset(size_t offset) {
   if (offset < kMinimumCharacterOffset) {
     throw std::invalid_argument("The passed in offset is too small.");

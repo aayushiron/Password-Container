@@ -42,10 +42,12 @@ include("${CINDER_PATH}/proj/cmake/modules/cinderMakeApp.cmake")
 
 list(APPEND CORE_SOURCE_FILES src/core/password_container.cc src/core/util.cc)
 
-list(APPEND SOURCE_FILES    ${CORE_SOURCE_FILES}
+list(APPEND CLI_SOURCE_FILES src/cli/command_line_input.cc)
+
+list(APPEND SOURCE_FILES    ${CORE_SOURCE_FILES}   ${CLI_SOURCE_FILES}
         src/gui/password_container_app.cc)
 
-list(APPEND TEST_FILES tests/test_password_container.cc tests/test_util.cc)
+list(APPEND TEST_FILES tests/test_password_container.cc tests/test_util.cc tests/test_command_line_input.cc)
 
 ci_make_app(
         APP_NAME        password-container-app

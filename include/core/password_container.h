@@ -40,6 +40,9 @@ class PasswordContainer {
   // if the passed in key is empty.
   void SetKey(const std::string& new_key);
 
+  // Gets the key.
+  std::string GetKey() const;
+
   // Sets the character_offset to the passed in value. Throws an
   // invalid_argument exception if offset is lower than the minimum offset.
   void SetOffset(size_t offset);
@@ -134,15 +137,6 @@ class PasswordContainer {
   // Calculates the real offset that is used for encryption using the current
   // character_offset_ and key_.
   size_t CalculateRealOffset() const;
-
-  // Returns a boolean that signifies whether there is an account with the
-  // passed in account_name in the file.
-  bool HasAccount(const std::string& account_name);
-
-  // Finds the iterator that refers to the AccountDetails object is referred to
-  // by the passed in account_name.
-  std::vector<AccountDetails>::iterator FindIterator(
-      const std::string& account_name);
 
   // Finds out whether the passed in int represents a valid char or not
   bool IsValidChar(int int_representation) const;
