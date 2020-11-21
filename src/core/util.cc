@@ -20,4 +20,15 @@ int ConvertStringToInt(const std::string& to_convert) {
   return asInt;
 }
 
+std::string ConvertToLowerCase(const std::string& to_convert) {
+  std::string lower_case_string;
+
+  // Loops through all characters and converts them to lower case
+  for (char character : to_convert) {
+    lower_case_string += tolower(character);
+  }
+
+  return lower_case_string;
+}
+
 }  // namespace util

@@ -13,6 +13,12 @@ namespace util {
 // an int.
 int ConvertStringToInt(const std::string& to_convert);
 
+// Converts the passed in string to a string with all lowercase characters
+//
+// Takes in a string called to_convert that represents the string to be converted
+// to lowercase.
+std::string ConvertToLowerCase(const std::string& to_convert);
+
 }  // namespace util
 
 #endif  // CORE_UTIL_H
