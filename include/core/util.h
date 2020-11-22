@@ -19,6 +19,12 @@ int ConvertStringToInt(const std::string& to_convert);
 // to lowercase.
 std::string ConvertToLowerCase(const std::string& to_convert);
 
+// Generates a random int between min and max
+int GenerateRandomInt(int min, int max);
+
+// Generates a random password with valid characters with the specified length.
+std::string GenerateRandomPassword(size_t password_length);
+
 }  // namespace util
 
 #endif  // CORE_UTIL_H
