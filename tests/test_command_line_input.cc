@@ -14,7 +14,7 @@ using std::istringstream;
 using std::ostringstream;
 using std::string;
 
-bool HasValidData(const PasswordContainer& container) {
+bool ContainerHasValidData(const PasswordContainer& container) {
   std::vector<PasswordContainer::AccountDetails> accounts =
       container.GetAccounts();
 
@@ -61,7 +61,7 @@ TEST_CASE("Tests for Constructor") {
         CommandLineInput(std::cin, std::cout,
                          "../../../tests/resources/Data.pwords", "CorrectKey");
 
-    REQUIRE(HasValidData(input.GetContainer()));
+    REQUIRE(ContainerHasValidData(input.GetContainer()));
   }
 }
 

@@ -8,27 +8,24 @@ using passwordcontainer::PasswordContainer;
 using std::ifstream;
 using std::stringstream;
 
-void CheckForValidData(const PasswordContainer& container) {
+bool HasValidData(const PasswordContainer& container) {
   std::vector<PasswordContainer::AccountDetails> accounts =
       container.GetAccounts();
 
-  SECTION("Has correct data for first account") {
-    REQUIRE(accounts[0].account_name == "Account1");
-    REQUIRE(accounts[0].username == "Username1");
-    REQUIRE(accounts[0].password == "Password1");
-  }
+  bool correct_first_account = accounts[0].account_name == "Account1" &&
+                               accounts[0].username == "Username1" &&
+                               accounts[0].password == "Password1";
 
-  SECTION("Has correct data for second account") {
-    REQUIRE(accounts[1].account_name == "Account2");
-    REQUIRE(accounts[1].username == "Username2");
-    REQUIRE(accounts[1].password == "Password2");
-  }
+  bool correct_second_account = accounts[1].account_name == "Account2" &&
+                                accounts[1].username == "Username2" &&
+                                accounts[1].password == "Password2";
 
-  SECTION("Has correct data for third account") {
-    REQUIRE(accounts[2].account_name == "Account3");
-    REQUIRE(accounts[2].username == "Username3");
-    REQUIRE(accounts[2].password == "Password3");
-  }
+  bool correct_third_account = accounts[2].account_name == "Account3" &&
+                               accounts[2].username == "Username3" &&
+                               accounts[2].password == "Password3";
+
+  return correct_first_account && correct_second_account &&
+         correct_third_account;
 }
 
 TEST_CASE("Tests for constructor") {
@@ -69,7 +66,7 @@ TEST_CASE("Tests for overloaded >> operator") {
     ifstream file("../../../tests/resources/Data.pwords");
     file >> container;
 
-    CheckForValidData(container);
+    REQUIRE(HasValidData(container));
   }
 }
 
@@ -135,7 +132,7 @@ TEST_CASE("Tests for overloaded << operator") {
     stringstream stream;
     stream << container;
 
-    CheckForValidData(container);
+    REQUIRE(HasValidData(container));
   }
 }
 
@@ -158,7 +155,7 @@ TEST_CASE("Tests for SetCryptographerKey") {
   SECTION("Doesn't cause data to get corrupted") {
     container.SetCryptographerKey("NewKey");
 
-    CheckForValidData(container);
+    REQUIRE(HasValidData(container));
   }
 }
 
@@ -182,7 +179,7 @@ TEST_CASE("Tests for SetCryptographerOffset") {
   SECTION("Doesn't cause data to get corrupted") {
     container.SetCryptographerOffset(200);
 
-    CheckForValidData(container);
+    REQUIRE(HasValidData(container));
   }
 }
 
@@ -214,7 +211,7 @@ TEST_CASE("Tests for AddAccount") {
         container.AddAccount("NewAccount", "NewUsername", "NewPassword"));
 
     SECTION("Doesn't change previous data") {
-      CheckForValidData(container);
+      REQUIRE(HasValidData(container));
     }
 
     SECTION("New Account name is correct") {
