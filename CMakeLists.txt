@@ -49,8 +49,8 @@ list(APPEND SOURCE_FILES    ${CORE_SOURCE_FILES}   ${CLI_SOURCE_FILES}
 
 list(APPEND TEST_FILES tests/test_password_container.cc tests/test_util.cc tests/test_command_line_input.cc tests/test_argument_parser.cc)
 
-add_executable(password-container apps/password_container_main.cc ${CORE_SOURCE_FILES} ${CLI_SOURCE_FILES})
-target_include_directories(password-container PRIVATE include)
+add_executable(password-container-cli apps/password_container_cli_main.cc ${CORE_SOURCE_FILES} ${CLI_SOURCE_FILES})
+target_include_directories(password-container-cli PRIVATE include)
 
 ci_make_app(
         APP_NAME        password-container-app

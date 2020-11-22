@@ -104,7 +104,7 @@ TEST_CASE("Tests for CreateCommandLineInput") {
         (char*)"CorrectKey",
         NULL
     };
-    CommandLineInput input = CreateCommandLineInput(2, argument,
+    CommandLineInput input = CreateCommandLineInput(3, argument,
                                                     std::cin, std::cout);
     PasswordContainer container = input.GetContainer();
 

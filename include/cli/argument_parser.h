@@ -11,6 +11,9 @@ namespace cli {
 
 namespace argumentparser {
 
+// The number of command line arguments that should be passed in
+const int kNumArguments = 3;
+
 // Method that creates a command line input object. Expects the filepath of the
 // save file for the PasswordContainer followed by the key used to decrypt the
 // contents of that save file.
@@ -23,7 +26,7 @@ namespace argumentparser {
 //
 // Throws an invalid_argument exception if the passed in command line arguments
 // are not matching expectations.
-CommandLineInput& CreateCommandLineInput(int argc, char* argv[],
+CommandLineInput CreateCommandLineInput(int argc, char* argv[],
                                          std::istream& input, std::ostream& output);
 
 }
