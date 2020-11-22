@@ -84,6 +84,8 @@ void CommandLineInput::ParseCommand(const string& command) {
     ListAccounts();
   } else if (command == kShowDetailsCommand) {
     ShowAccountDetails();
+  } else if (command == kGeneratePassCommand) {
+    GeneratePassword();
   } else if (command == kKeyChangeCommand) {
     ChangeContainerKey();
   } else if (command == kSaveCommand) {
@@ -152,6 +154,20 @@ void CommandLineInput::ShowAccountDetails() {
   } else {
     user_output_ << "That account does not exist!" << std::endl << std::endl;
   }
+}
+
+void CommandLineInput::GeneratePassword() {
+  size_t password_size;
+
+  while (true) {
+    try {
+      string input = PromptForInput("Please enter the size of the password: ");
+      password_size = util::ConvertStringToInt(input);
+      break;
+    } catch (...) {}
+  }
+
+  user_output_ << util::GenerateRandomPassword(password_size) << std::endl << std::endl;
 }
 
 void CommandLineInput::ChangeContainerKey() {

@@ -116,6 +116,15 @@ TEST_CASE("Tests for HandleSingleCommand with an empty container") {
     REQUIRE(cli.GetContainer().GetAccounts().size() == 0);
   }
 
+  SECTION("Generate random password command generates random password") {
+    input << "generate password\n"
+             "10";
+    REQUIRE(cli.HandleSingleCommand());
+
+    // The number of characters the prompt and random password should generate
+    REQUIRE(output.str().size() == 53);
+  }
+
   SECTION("Save command saves empty string to file") {
     input << "save\n";
     REQUIRE(cli.HandleSingleCommand());
@@ -194,6 +203,17 @@ TEST_CASE("Tests for HandleSingleCommand with a populated container") {
     REQUIRE(cli.GetContainer().GetAccounts()[2].account_name == "Account3");
     REQUIRE(cli.GetContainer().GetAccounts()[2].username == "Username3");
     REQUIRE(cli.GetContainer().GetAccounts()[2].password == "Password3");
+  }
+
+  SECTION("Generate random password command generates random password") {
+    input << "generate password\n"
+             "15";
+    REQUIRE(cli.HandleSingleCommand());
+
+    std::cout << output.str();
+
+    // The number of characters the prompt and random password should generate
+    REQUIRE(output.str().size() == 58);
   }
 
   SECTION("List accounts lists out all accounts") {
@@ -319,6 +339,17 @@ TEST_CASE("Tests for HandleSingleCommand with invalid commands") {
                             "Please enter the account name: "
                             "Username: Username1\n"
                             "Password: Password1\n\n");
+  }
+
+  SECTION("Generate random password only accepts numerical input") {
+    input << "generate password\n"
+             "\n"
+             "invalid\n"
+             "30";
+    REQUIRE(cli.HandleSingleCommand());
+
+    // The number of characters the prompt and random password should generate
+    REQUIRE(output.str().size() == 151);
   }
 
   SECTION("Change key commands correctly changes the key") {

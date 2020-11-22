@@ -62,6 +62,7 @@ class CommandLineInput {
   const std::string kModifyCommand = "modify";
   const std::string kListCommand = "list accounts";
   const std::string kShowDetailsCommand = "show details";
+  const std::string kGeneratePassCommand = "generate password";
   const std::string kKeyChangeCommand = "change key";
   const std::string kSaveCommand = "save";
   const std::string kQuitCommand = "quit";
@@ -100,6 +101,9 @@ class CommandLineInput {
 
   // Changes the key in the container to the value passed in by the user.
   void ChangeContainerKey();
+
+  // Generates a random password with the size of the value passed in by user.
+  void GeneratePassword();
 
   // Indicates that the inputted command was invalid.
   void IndicateInvalidCommand();
