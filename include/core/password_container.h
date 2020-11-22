@@ -5,6 +5,8 @@
 #include <string>
 #include <vector>
 
+#include "core/cryptographer.h"
+
 namespace passwordcontainer {
 
 // The class that contains all the data for the username and passwords. Can read
@@ -38,14 +40,14 @@ class PasswordContainer {
 
   // Sets the key to the passed in value. Throws an invalid_argument exception
   // if the passed in key is empty.
-  void SetKey(const std::string& new_key);
+  void SetCryptographerKey(const std::string& new_key);
 
   // Gets the key.
-  std::string GetKey() const;
+  std::string GetCryptographerKey() const;
 
   // Sets the character_offset to the passed in value. Throws an
   // invalid_argument exception if offset is lower than the minimum offset.
-  void SetOffset(size_t offset);
+  void SetCryptographerOffset(size_t offset);
 
   // Adds a new account with the passed in account_name, username, and password.
   //
@@ -98,7 +100,7 @@ class PasswordContainer {
                                   const PasswordContainer& container);
 
  private:
-  const size_t kMinimumCharacterOffset = 100;
+  Cryptographer cryptographer_;
 
   // Enum that stores values for the index value of how details are stored in
   // a file (There is the account name, then username, then password in the save
@@ -109,28 +111,12 @@ class PasswordContainer {
     kPasswordIndex = 2
   };
 
-  // The length that 1 encrypted character has in a file
-  const size_t kEncryptedCharacterLength = 3;
-
   // Represents the number of details that are in AccountDetails (account name,
   // username, and password.
   const size_t kNumDetails = 3;
 
-  // The initial offset used to calculate the final offset. Must be at least
-  // kMinimumCharacterOffset.
-  size_t character_offset_;
-
-  // The key used to generate a new offset to decrypt/encrypt the data
-  std::string key_;
-
   // A vector of all accounts stored in the program
   std::vector<AccountDetails> accounts_;
-
-  // Encrypts the string that is passed in using the character_offset_ and key_.
-  std::string EncryptString(const std::string& str) const;
-
-  // Decrypts the string that is passed in using the character_offset_ and key_.
-  std::string DecryptString(const std::string& str) const;
 
   // Adds all the account data that are represented in the passed in
   // decrypted_string to the container.
@@ -142,13 +128,6 @@ class PasswordContainer {
 
   // Returns a string representation of all the data currently in the container.
   std::string GenerateStringRepresentation() const;
-
-  // Calculates the real offset that is used for encryption using the current
-  // character_offset_ and key_.
-  size_t CalculateRealOffset() const;
-
-  // Finds out whether the passed in int represents a valid char or not
-  bool IsValidChar(int int_representation) const;
 };
 
 }  // namespace passwordcontainer

@@ -159,6 +159,7 @@ void CommandLineInput::ShowAccountDetails() {
 void CommandLineInput::GeneratePassword() {
   size_t password_size;
 
+  // Keeps prompting for password until a valid integer is passed in.
   while (true) {
     try {
       string input = PromptForInput("Please enter the size of the password: ");
@@ -173,7 +174,7 @@ void CommandLineInput::GeneratePassword() {
 void CommandLineInput::ChangeContainerKey() {
   // Gets the new_key from the user
   string new_key = PromptForInput("Please enter the new key: ");
-  container_->SetKey(new_key);
+  container_->SetCryptographerKey(new_key);
 
   user_output_ << "Key Changed!" << std::endl << std::endl;
 }

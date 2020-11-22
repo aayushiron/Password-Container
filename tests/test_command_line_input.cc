@@ -140,7 +140,7 @@ TEST_CASE("Tests for HandleSingleCommand with an empty container") {
     input << "change key\nNewKey";
     REQUIRE(cli.HandleSingleCommand());
 
-    REQUIRE(cli.GetContainer().GetKey() == "NewKey");
+    REQUIRE(cli.GetContainer().GetCryptographerKey() == "NewKey");
   }
 
   SECTION("Quit command returns false") {
@@ -210,8 +210,6 @@ TEST_CASE("Tests for HandleSingleCommand with a populated container") {
              "15";
     REQUIRE(cli.HandleSingleCommand());
 
-    std::cout << output.str();
-
     // The number of characters the prompt and random password should generate
     REQUIRE(output.str().size() == 58);
   }
@@ -258,7 +256,7 @@ TEST_CASE("Tests for HandleSingleCommand with a populated container") {
     input << "change key\nNewKey";
     REQUIRE(cli.HandleSingleCommand());
 
-    REQUIRE(cli.GetContainer().GetKey() == "NewKey");
+    REQUIRE(cli.GetContainer().GetCryptographerKey() == "NewKey");
   }
 
   SECTION("Quit command returns false") {
@@ -358,6 +356,6 @@ TEST_CASE("Tests for HandleSingleCommand with invalid commands") {
              "NewKey\n";
     REQUIRE(cli.HandleSingleCommand());
 
-    REQUIRE(cli.GetContainer().GetKey() == "NewKey");
+    REQUIRE(cli.GetContainer().GetCryptographerKey() == "NewKey");
   }
 }

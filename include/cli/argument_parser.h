@@ -27,7 +27,7 @@ const int kNumArguments = 3;
 // Throws an invalid_argument exception if the passed in command line arguments
 // are not matching expectations.
 CommandLineInput CreateCommandLineInput(int argc, char* argv[],
-                                         std::istream& input, std::ostream& output);
+                                        std::istream& input, std::ostream& output);
 
 }
 

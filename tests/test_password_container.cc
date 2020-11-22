@@ -55,13 +55,13 @@ TEST_CASE("Tests for overloaded >> operator") {
 
   SECTION("Throws error for wrong key passed in") {
     ifstream file("../../../tests/resources/Data.pwords");
-    container.SetKey("Key");
+    container.SetCryptographerKey("Key");
     REQUIRE_THROWS_AS(file >> container, std::invalid_argument);
   }
 
   SECTION("Throws error for wrong offset passed in") {
     ifstream file("../../../tests/resources/Data.pwords");
-    container.SetOffset(200);
+    container.SetCryptographerOffset(200);
     REQUIRE_THROWS_AS(file >> container, std::invalid_argument);
   }
 
@@ -102,7 +102,7 @@ TEST_CASE("Tests for overloaded << operator") {
   }
 
   SECTION("Correctly encrypts data when the key is changed") {
-    container.SetKey("NewDifferentKey");
+    container.SetCryptographerKey("NewDifferentKey");
     stringstream stream;
     stream << container;
 
@@ -117,7 +117,7 @@ TEST_CASE("Tests for overloaded << operator") {
   }
 
   SECTION("Correctly encrypts data when the offset is changed") {
-    container.SetOffset(200);
+    container.SetCryptographerOffset(200);
     stringstream stream;
     stream << container;
 
@@ -139,47 +139,47 @@ TEST_CASE("Tests for overloaded << operator") {
   }
 }
 
-TEST_CASE("Tests for SetKey") {
+TEST_CASE("Tests for SetCryptographerKey") {
   PasswordContainer container(100, "CorrectKey");
   ifstream file("../../../tests/resources/Data.pwords");
   file >> container;
 
   SECTION("Throws error when passed in key is empty") {
-    REQUIRE_THROWS_AS(container.SetKey(""), std::invalid_argument);
+    REQUIRE_THROWS_AS(container.SetCryptographerKey(""), std::invalid_argument);
   }
 
   SECTION("Does nothing when passed in key is valid") {
-    REQUIRE_NOTHROW(container.SetKey("NewKey"));
+    REQUIRE_NOTHROW(container.SetCryptographerKey("NewKey"));
   }
 
   // This test is here because if the accounts are calculated whenever the
   // GetAccounts function is called, changing the key will change the
   // decryption of the data
   SECTION("Doesn't cause data to get corrupted") {
-    container.SetKey("NewKey");
+    container.SetCryptographerKey("NewKey");
 
     CheckForValidData(container);
   }
 }
 
-TEST_CASE("Tests for SetOffset") {
+TEST_CASE("Tests for SetCryptographerOffset") {
   PasswordContainer container(100, "CorrectKey");
   ifstream file("../../../tests/resources/Data.pwords");
   file >> container;
 
   SECTION("Throws error when passed in offset is too small") {
-    REQUIRE_THROWS_AS(container.SetOffset(99), std::invalid_argument);
+    REQUIRE_THROWS_AS(container.SetCryptographerOffset(99), std::invalid_argument);
   }
 
   SECTION("Does nothing when passed in offset is valid") {
-    REQUIRE_NOTHROW(container.SetOffset(101));
+    REQUIRE_NOTHROW(container.SetCryptographerOffset(101));
   }
 
   // This test is here because if the accounts are calculated whenever the
   // GetAccounts function is called, changing the offset will change the
   // decryption of the data
   SECTION("Doesn't cause data to get corrupted") {
-    container.SetOffset(200);
+    container.SetCryptographerOffset(200);
 
     CheckForValidData(container);
   }
