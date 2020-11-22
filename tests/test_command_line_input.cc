@@ -1,17 +1,17 @@
 #include <catch2/catch.hpp>
+#include <fstream>
 #include <iostream>
 #include <sstream>
-#include <fstream>
 #include <string>
 
 #include "cli/command_line_input.h"
 
-using passwordcontainer::cli::CommandLineInput;
 using passwordcontainer::PasswordContainer;
+using passwordcontainer::cli::CommandLineInput;
+using std::ifstream;
 using std::istream;
 using std::istringstream;
 using std::ostringstream;
-using std::ifstream;
 using std::string;
 
 bool HasValidData(const PasswordContainer& container) {
@@ -30,29 +30,36 @@ bool HasValidData(const PasswordContainer& container) {
                                accounts[2].username == "Username3" &&
                                accounts[2].password == "Password3";
 
-  return correct_first_account && correct_second_account && correct_third_account;
+  return correct_first_account && correct_second_account &&
+         correct_third_account;
 }
 
 TEST_CASE("Tests for Constructor") {
   SECTION("Throws error when the file path for the container doesn't exist") {
-    REQUIRE_THROWS_AS(CommandLineInput(std::cin, std::cout, "InvalidPath", "CorrectKey"),
-                      std::invalid_argument);
+    REQUIRE_THROWS_AS(
+        CommandLineInput(std::cin, std::cout, "InvalidPath", "CorrectKey"),
+        std::invalid_argument);
   }
 
   SECTION("Throws error when the passed in file has bad data") {
-    REQUIRE_THROWS_AS(CommandLineInput(std::cin, std::cout, "../../../tests/resources/BadData.pwords", "CorrectKey"),
-                      std::invalid_argument);
+    REQUIRE_THROWS_AS(
+        CommandLineInput(std::cin, std::cout,
+                         "../../../tests/resources/BadData.pwords",
+                         "CorrectKey"),
+        std::invalid_argument);
   }
 
   SECTION("Throws error when the passed in key is not correct") {
-    REQUIRE_THROWS_AS(CommandLineInput(std::cin, std::cout, "../../../tests/resources/Data.pwords", "key"),
-                      std::invalid_argument);
+    REQUIRE_THROWS_AS(
+        CommandLineInput(std::cin, std::cout,
+                         "../../../tests/resources/Data.pwords", "key"),
+        std::invalid_argument);
   }
 
   SECTION("Constructor gets correct values when passed in data is correct") {
-    CommandLineInput input = CommandLineInput(std::cin,std::cout,
-                                              "../../../tests/resources/Data.pwords",
-                                              "CorrectKey");
+    CommandLineInput input =
+        CommandLineInput(std::cin, std::cout,
+                         "../../../tests/resources/Data.pwords", "CorrectKey");
 
     REQUIRE(HasValidData(input.GetContainer()));
   }
@@ -61,9 +68,8 @@ TEST_CASE("Tests for Constructor") {
 TEST_CASE("Tests for HandleSingleCommand with an empty container") {
   std::stringstream input;
   std::stringstream output;
-  CommandLineInput cli = CommandLineInput(input,output,
-                                            "../../../tests/resources/BlankData.pwords",
-                                            "CorrectKey");
+  CommandLineInput cli = CommandLineInput(
+      input, output, "../../../tests/resources/BlankData.pwords", "CorrectKey");
 
   SECTION("Add command correctly adds account in empty container") {
     input << "add\n"
@@ -83,8 +89,9 @@ TEST_CASE("Tests for HandleSingleCommand with an empty container") {
              "Account1";
     REQUIRE(cli.HandleSingleCommand());
 
-    REQUIRE(output.str() == "> Please enter the Account Name: "
-                            "That account does not exist!\n\n");
+    REQUIRE(output.str() ==
+            "> Please enter the Account Name: "
+            "That account does not exist!\n\n");
     REQUIRE(cli.GetContainer().GetAccounts().size() == 0);
   }
 
@@ -93,8 +100,9 @@ TEST_CASE("Tests for HandleSingleCommand with an empty container") {
              "Account1";
     REQUIRE(cli.HandleSingleCommand());
 
-    REQUIRE(output.str() == "> Please enter the Account Name: "
-                            "That account does not exist!\n\n");
+    REQUIRE(output.str() ==
+            "> Please enter the Account Name: "
+            "That account does not exist!\n\n");
     REQUIRE(cli.GetContainer().GetAccounts().size() == 0);
   }
 
@@ -106,13 +114,15 @@ TEST_CASE("Tests for HandleSingleCommand with an empty container") {
     REQUIRE(cli.GetContainer().GetAccounts().size() == 0);
   }
 
-  SECTION("Show account details command shows error message in empty container") {
+  SECTION(
+      "Show account details command shows error message in empty container") {
     input << "show details\n"
              "Account1";
     REQUIRE(cli.HandleSingleCommand());
 
-    REQUIRE(output.str() == "> Please enter the account name: "
-                            "That account does not exist!\n\n");
+    REQUIRE(output.str() ==
+            "> Please enter the account name: "
+            "That account does not exist!\n\n");
     REQUIRE(cli.GetContainer().GetAccounts().size() == 0);
   }
 
@@ -152,9 +162,8 @@ TEST_CASE("Tests for HandleSingleCommand with an empty container") {
 TEST_CASE("Tests for HandleSingleCommand with a populated container") {
   std::stringstream input;
   std::stringstream output;
-  CommandLineInput cli = CommandLineInput(input,output,
-                                          "../../../tests/resources/Data.pwords",
-                                          "CorrectKey");
+  CommandLineInput cli = CommandLineInput(
+      input, output, "../../../tests/resources/Data.pwords", "CorrectKey");
 
   SECTION("Add command correctly adds account in populated container") {
     input << "add\n"
@@ -216,22 +225,25 @@ TEST_CASE("Tests for HandleSingleCommand with a populated container") {
 
   SECTION("List accounts lists out all accounts") {
     input << "list accounts\n";
-    //REQUIRE(cli.HandleSingleCommand());
+    // REQUIRE(cli.HandleSingleCommand());
     cli.HandleSingleCommand();
 
-    REQUIRE(output.str() == "> Account1\n"
-                            "Account2\n"
-                            "Account3\n\n");
+    REQUIRE(output.str() ==
+            "> Account1\n"
+            "Account2\n"
+            "Account3\n\n");
   }
 
-  SECTION("Show account details command shows error message in empty container") {
+  SECTION(
+      "Show account details command shows error message in empty container") {
     input << "show details\n"
              "Account1\n";
     REQUIRE(cli.HandleSingleCommand());
 
-    REQUIRE(output.str() == "> Please enter the account name: "
-                            "Username: Username1\n"
-                            "Password: Password1\n\n");
+    REQUIRE(output.str() ==
+            "> Please enter the account name: "
+            "Username: Username1\n"
+            "Password: Password1\n\n");
   }
 
   SECTION("Save command saves encrypted string to file") {
@@ -243,11 +255,12 @@ TEST_CASE("Tests for HandleSingleCommand with a populated container") {
     // https://stackoverflow.com/questions/3203452/how-to-read-entire-stream-into-a-stdstring
     string file_data(std::istreambuf_iterator<char>(save_file), {});
 
-    string correct_data = "2663003003123183113172502102863163023153112983103022"
-                          "5021028129831631632031231530125021126630030031231831"
-                          "1317251210286316302315311298310302251210281298316316"
-                          "3203123153012512112663003003123183113172522102863163"
-                          "02315311298310302252210281298316316320312315301252";
+    string correct_data =
+        "2663003003123183113172502102863163023153112983103022"
+        "5021028129831631632031231530125021126630030031231831"
+        "1317251210286316302315311298310302251210281298316316"
+        "3203123153012512112663003003123183113172522102863163"
+        "02315311298310302252210281298316316320312315301252";
 
     REQUIRE(file_data == correct_data);
   }
@@ -268,17 +281,16 @@ TEST_CASE("Tests for HandleSingleCommand with a populated container") {
 TEST_CASE("Tests for HandleSingleCommand with invalid commands") {
   std::stringstream input;
   std::stringstream output;
-  CommandLineInput cli = CommandLineInput(input,output,
-                                          "../../../tests/resources/Data.pwords",
-                                          "CorrectKey");
-  
+  CommandLineInput cli = CommandLineInput(
+      input, output, "../../../tests/resources/Data.pwords", "CorrectKey");
+
   SECTION("Invalid Command passed in") {
     input << "invalid command\n";
     REQUIRE(cli.HandleSingleCommand());
 
     REQUIRE(output.str() == "> Invalid Command!\n\n");
   }
-  
+
   SECTION("Only accepts non-empty strings for main command parameters") {
     input << "\n"
              "\n"
@@ -327,16 +339,18 @@ TEST_CASE("Tests for HandleSingleCommand with invalid commands") {
     REQUIRE(cli.GetContainer().GetAccounts()[0].password == "NewPassword");
   }
 
-  SECTION("Show account details command shows error message in empty container") {
+  SECTION(
+      "Show account details command shows error message in empty container") {
     input << "show details\n"
              "\n"
              "Account1\n";
     REQUIRE(cli.HandleSingleCommand());
 
-    REQUIRE(output.str() == "> Please enter the account name: "
-                            "Please enter the account name: "
-                            "Username: Username1\n"
-                            "Password: Password1\n\n");
+    REQUIRE(output.str() ==
+            "> Please enter the account name: "
+            "Please enter the account name: "
+            "Username: Username1\n"
+            "Password: Password1\n\n");
   }
 
   SECTION("Generate random password only accepts numerical input") {

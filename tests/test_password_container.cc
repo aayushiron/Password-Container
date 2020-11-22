@@ -168,7 +168,8 @@ TEST_CASE("Tests for SetCryptographerOffset") {
   file >> container;
 
   SECTION("Throws error when passed in offset is too small") {
-    REQUIRE_THROWS_AS(container.SetCryptographerOffset(99), std::invalid_argument);
+    REQUIRE_THROWS_AS(container.SetCryptographerOffset(99),
+                      std::invalid_argument);
   }
 
   SECTION("Does nothing when passed in offset is valid") {
@@ -372,7 +373,8 @@ TEST_CASE("Tests for FindAccount") {
   file >> container;
 
   SECTION("Returns correct element iterator for account that exists") {
-    PasswordContainer::AccountDetails account = *container.FindAccount("Account1");
+    PasswordContainer::AccountDetails account =
+        *container.FindAccount("Account1");
     REQUIRE(account.account_name == "Account1");
     REQUIRE(account.username == "Username1");
     REQUIRE(account.password == "Password1");

@@ -1,9 +1,9 @@
 #ifndef CLI_ARGUMENT_PARSER_H
 #define CLI_ARGUMENT_PARSER_H
 
-#include "cli/command_line_input.h"
-
 #include <iostream>
+
+#include "cli/command_line_input.h"
 
 namespace passwordcontainer {
 
@@ -27,12 +27,13 @@ const int kNumArguments = 3;
 // Throws an invalid_argument exception if the passed in command line arguments
 // are not matching expectations.
 CommandLineInput CreateCommandLineInput(int argc, char* argv[],
-                                        std::istream& input, std::ostream& output);
+                                        std::istream& input,
+                                        std::ostream& output);
 
-}
+}  // namespace argumentparser
 
-}
+}  // namespace cli
 
-}
+}  // namespace passwordcontainer
 
 #endif  // CLI_ARGUMENT_PARSER_H

@@ -1,8 +1,8 @@
 #ifndef CLI_COMMAND_LINE_INPUT_H
 #define CLI_COMMAND_LINE_INPUT_H
 
-#include <string>
 #include <iostream>
+#include <string>
 
 #include "core/password_container.h"
 
@@ -29,7 +29,8 @@ class CommandLineInput {
   // exist or has invalid data. Also throws an invalid_argument exception if the
   // key is invalid.
   CommandLineInput(std::istream& user_input, std::ostream& user_output,
-                   const std::string& container_location, const std::string& key);
+                   const std::string& container_location,
+                   const std::string& key);
 
   ~CommandLineInput();
 

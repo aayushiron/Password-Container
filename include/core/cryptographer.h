@@ -47,6 +47,6 @@ class Cryptographer {
   bool IsValidChar(int int_representation) const;
 };
 
-}
+}  // namespace passwordcontainer
 
 #endif  // CORE_CRYPTOGRAPHER_H

@@ -1,8 +1,8 @@
 #include "core/util.h"
 
+#include <random>
 #include <sstream>
 #include <string>
-#include <random>
 
 namespace util {
 
@@ -35,7 +35,7 @@ std::string ConvertToLowerCase(const std::string& to_convert) {
 // https://www.delftstack.com/howto/cpp/how-to-generate-random-doubles-cpp/
 int GenerateRandomInt(int min, int max) {
   if (min == max) {
-    return min; // Only one possible value
+    return min;  // Only one possible value
   } else if (max < min) {
     throw std::invalid_argument("The passed in bounds are invalid!");
   }

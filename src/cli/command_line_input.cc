@@ -1,7 +1,8 @@
 #include "cli/command_line_input.h"
-#include "core/util.h"
 
 #include <fstream>
+
+#include "core/util.h"
 
 using std::string;
 
@@ -13,18 +14,21 @@ CommandLineInput::CommandLineInput(std::istream& user_input,
                                    std::ostream& user_output,
                                    const string& container_location,
                                    const string& key)
-    : user_input_(user_input), user_output_(user_output),
+    : user_input_(user_input),
+      user_output_(user_output),
       container_location_(container_location) {
   LoadContainer(key);
 }
 
 CommandLineInput::~CommandLineInput() {
-  if (container_ != nullptr) delete container_;
+  if (container_ != nullptr)
+    delete container_;
 }
 
 void CommandLineInput::HandleMultipleCommands() {
   // Stays in an infinite loop until the user wants to quit
-  while (HandleSingleCommand()) {}
+  while (HandleSingleCommand()) {
+  }
 
   user_output_ << "Goodbye!" << std::endl;
 }
@@ -163,12 +167,13 @@ void CommandLineInput::GeneratePassword() {
   while (true) {
     try {
       string input = PromptForInput("Please enter the size of the password: ");
-      password_size = util::ConvertStringToInt(input);
+      password_size = static_cast<size_t>(util::ConvertStringToInt(input));
       break;
     } catch (...) {}
   }
 
-  user_output_ << util::GenerateRandomPassword(password_size) << std::endl << std::endl;
+  user_output_ << util::GenerateRandomPassword(password_size) << std::endl
+               << std::endl;
 }
 
 void CommandLineInput::ChangeContainerKey() {

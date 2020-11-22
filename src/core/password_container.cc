@@ -10,7 +10,8 @@ using std::vector;
 namespace passwordcontainer {
 
 PasswordContainer::PasswordContainer(size_t offset, const string& key)
-    : cryptographer_(offset, key) {}
+    : cryptographer_(offset, key) {
+}
 
 vector<PasswordContainer::AccountDetails> PasswordContainer::GetAccounts()
     const {
@@ -79,7 +80,8 @@ std::istream& operator>>(std::istream& input, PasswordContainer& container) {
   // Code to get all data from the input file found here:
   // https://stackoverflow.com/questions/3203452/how-to-read-entire-stream-into-a-stdstring
   string encrypted_string(std::istreambuf_iterator<char>(input), {});
-  string decrypted_string = container.cryptographer_.DecryptString(encrypted_string);
+  string decrypted_string =
+      container.cryptographer_.DecryptString(encrypted_string);
 
   container.AddAllData(decrypted_string);
 
@@ -99,8 +101,8 @@ string PasswordContainer::GenerateStringRepresentation() const {
 
   // Loops through all accounts and adds their details to the final string
   for (const AccountDetails& account : accounts_) {
-    string_representation +=
-        account.account_name + '\t' + account.username + '\t' + account.password + '\n';
+    string_representation += account.account_name + '\t' + account.username +
+                             '\t' + account.password + '\n';
   }
 
   // Removes the trailing \n character from the string

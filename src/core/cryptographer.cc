@@ -1,7 +1,8 @@
 #include "core/cryptographer.h"
-#include "core/util.h"
 
 #include <string>
+
+#include "core/util.h"
 
 using std::string;
 
@@ -91,4 +92,4 @@ bool Cryptographer::IsValidChar(int int_representation) const {
          (int_representation >= ' ' && int_representation <= '~');
 }
 
-}
+}  // namespace passwordcontainer
