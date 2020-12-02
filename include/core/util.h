@@ -2,6 +2,7 @@
 #define CORE_UTIL_H
 
 #include <string>
+#include <vector>
 
 namespace util {
 
@@ -24,6 +25,9 @@ int GenerateRandomInt(int min, int max);
 
 // Generates a random password with valid characters with the specified length.
 std::string GenerateRandomPassword(size_t password_length);
+
+// Generates a char* vector from an input string vector.
+std::vector<char*> ConvertStringVecToCharVec(std::vector<std::string> &input);
 
 }  // namespace util
 

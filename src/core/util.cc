@@ -1,5 +1,7 @@
 #include "core/util.h"
 
+#include <algorithm>
+#include <iterator>
 #include <random>
 #include <sstream>
 #include <string>
@@ -57,6 +59,23 @@ std::string GenerateRandomPassword(size_t password_length) {
   }
 
   return generated_password;
+}
+
+// Code from:
+// https://stackoverflow.com/questions/26032039/convert-vectorstring-into-char-c
+std::vector<char *> ConvertStringVecToCharVec(std::vector<std::string> &input) {
+  std::vector<char*> result;
+
+  // remember the nullptr terminator
+  result.reserve(input.size()+1);
+
+  // Adds the data for each string into the result vector
+  for (std::string& data : input) {
+    result.push_back(&data[0]);
+  }
+
+  result.push_back(nullptr);
+  return result;
 }
 
 }  // namespace util
