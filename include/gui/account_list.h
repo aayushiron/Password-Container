@@ -43,13 +43,19 @@ class AccountList {
   // Draws the menu bar and updates all variables that relate to the menu bar.
   void DrawMenuBar();
 
+  // Draws a sub option in the menu that uses the passed in is_clicked boolean
+  // to check whether the option has been clicked. Uses the passed in
+  // option_name as the name of the option in the menu. The menu does not update
+  // the boolean if is_clicked is true.
+  void DrawMenuSubOption(bool& is_clicked, const char* option_name);
+
   // Draws the Account list and updates all variables that relate to the
   // account list.
   void DrawAccountList();
 };
 
-}
+}  // namespace gui
 
-}
+}  // namespace passwordcontainer
 
-#endif  // PASSWORD_CONTAINER_ACCOUNT_LIST_H
+#endif  // GUI_ACCOUNT_LIST_H
