@@ -9,6 +9,7 @@
 
 #include "core/password_container.h"
 #include "gui/account_list.h"
+#include "gui/modify_account_window.h"
 
 namespace passwordcontainer {
 
@@ -30,6 +31,8 @@ class PasswordContainerApp : public ci::app::App {
 
   // The account list object used as the main window
   AccountList account_list_;
+  // The window used when modifying the an account
+  ModifyAccountWindow modify_account_window_;
 
   // Booleans to track the action the user expects to be executed
   bool is_modification_requested_;

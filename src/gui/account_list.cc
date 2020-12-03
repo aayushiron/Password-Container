@@ -15,11 +15,9 @@ AccountList::AccountList(const PasswordContainer &container,
       change_key_pressed_(key_change_bool), selected_account_(selected_acc_ind){}
 
 void AccountList::DrawWindowAndUpdateValues() {
-  // TODO: CHANGE TO MORE REPRESENTATIVE VALUE
-  bool window_active = true;
-
-  // Starts creating the new window
-  ui::Begin("Accounts:", &window_active, ImGuiWindowFlags_MenuBar);
+  // Starts creating the new window (false as second parameter to get rid of x
+  // button at top right of window).
+  ui::Begin("Accounts:", false, ImGuiWindowFlags_MenuBar);
 
   DrawMenuBar();
   DrawAccountList();
@@ -52,12 +50,12 @@ void AccountList::DrawMenuBar() {
   }
 }
 
-void AccountList::DrawMenuSubOption(bool &is_clicked, const char* option_name) {
+void AccountList::DrawMenuSubOption(bool& is_clicked, const char* option_name) {
   // Creates a submenu item and sets the boolean for the sub option if the
   // button has not already been pressed (this boolean is used in
   // other windows that will change the value to false if it is true)
   if (!is_clicked) {
-    change_key_pressed_ = ImGui::MenuItem(option_name);
+    is_clicked = ImGui::MenuItem(option_name);
   } else {
     ImGui::MenuItem(option_name);
   }
@@ -72,12 +70,23 @@ void AccountList::DrawAccountList() {
     account_names[index] = (container_.GetAccounts().at(index).account_name);
   }
 
+  // Stores the selected index before the user makes any changes
+  int original_index = selected_account_;
+
   // Draws a list of accounts that shows that selected_account_ account is
   // selected (the function also updates selected_account_ if the user selects
   // another value).
   ui::ListBox("Accounts", &selected_account_,
               util::ConvertStringVecToCharVec(account_names).data(),
               account_names.size());
+
+  // If the account selected changes, close all windows that relate to the
+  // previously selected account.
+  if (original_index != selected_account_) {
+    modify_account_pressed_ = false;
+    add_account_pressed_ = false;
+    delete_account_pressed_ = false;
+  }
 }
 
 }  // namespace gui
