@@ -45,7 +45,7 @@ list(APPEND CORE_SOURCE_FILES src/core/password_container.cc src/core/cryptograp
 list(APPEND CLI_SOURCE_FILES src/cli/command_line_input.cc src/cli/argument_parser.cc)
 
 list(APPEND SOURCE_FILES    ${CORE_SOURCE_FILES}   ${CLI_SOURCE_FILES}
-        src/gui/password_container_app.cc src/gui/account_list.cc)
+        src/gui/password_container_app.cc src/gui/account_list.cc src/gui/modify_account_window.cc)
 
 list(APPEND TEST_FILES tests/test_password_container.cc tests/test_util.cc tests/test_command_line_input.cc tests/test_argument_parser.cc)
 
