@@ -29,6 +29,9 @@ std::string GenerateRandomPassword(size_t password_length);
 // Generates a char* vector from an input string vector.
 std::vector<char*> ConvertStringVecToCharVec(std::vector<std::string> &input);
 
+// Copies the passed in string to the clipboard.
+void CopyToClipboard(const std::string &s);
+
 }  // namespace util
 
 #endif  // CORE_UTIL_H
