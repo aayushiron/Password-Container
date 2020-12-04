@@ -2,29 +2,33 @@
 #define GUI_ACCOUNT_LIST_H
 
 #include "core/password_container.h"
+#include "gui/window/window.h"
 
 namespace passwordcontainer {
 
 namespace gui {
 
-const int kNoAccountSelectedIndex = -1;
+namespace window {
 
 // This class represents the main window of the gui. The main window has a menu
 // bar that allows you to modify the accounts, delete the accounts, add
 // accounts, and the change the key for the encryption. It also has a list of
 // Account names that is the main interface for indicating the selected account.
-class AccountList {
+class AccountListWindow : public Window {
  public:
-  // Creates a new AccountList object using the passed in container, booleans,
+  // Creates a new AccountListWindow object using the passed in container, booleans,
   // and the current selected account index. Assumes that all values are valid
   // when creating objects.
-  AccountList(const PasswordContainer& container_, bool& modify_bool,
-              bool& delete_bool, bool& add_bool, bool& key_change_bool,
-              int& selected_acc_ind);
+  AccountListWindow(const PasswordContainer& container_, bool& modify_bool,
+                    bool& delete_bool, bool& add_bool, bool& key_change_bool,
+                    int& selected_acc_ind);
 
   // Draws the window with the menu bar and a list of all accounts. Updates the
   // values of all booleans and integers that might be used by other windows.
-  void DrawWindowAndUpdateValues();
+  void DrawWindow() override;
+
+  // This window does not need this function
+  void UpdateWindow() override {};
 
  private:
   // The password container where all of the account information is found.
@@ -53,6 +57,8 @@ class AccountList {
   // account list.
   void DrawAccountList();
 };
+
+}
 
 }  // namespace gui
 

@@ -1,20 +1,23 @@
-#include "gui/account_list.h"
-#include "core/util.h"
+#include "gui/window/account_list_window.h"
 
 #include <CinderImGui.h>
+
+#include "core/util.h"
 
 namespace passwordcontainer {
 
 namespace gui {
 
-AccountList::AccountList(const PasswordContainer &container,
-                         bool &modify_bool, bool &delete_bool, bool &add_bool,
-                         bool &key_change_bool, int &selected_acc_ind)
+namespace window {
+
+AccountListWindow::AccountListWindow(const PasswordContainer &container,
+                                     bool &modify_bool, bool &delete_bool, bool &add_bool,
+                                     bool &key_change_bool, int &selected_acc_ind)
     : container_(container), modify_account_pressed_(modify_bool),
       delete_account_pressed_(delete_bool), add_account_pressed_(add_bool),
       change_key_pressed_(key_change_bool), selected_account_(selected_acc_ind){}
 
-void AccountList::DrawWindowAndUpdateValues() {
+void AccountListWindow::DrawWindow() {
   // Starts creating the new window (false as second parameter to get rid of x
   // button at top right of window).
   ui::Begin("Accounts:", false, ImGuiWindowFlags_MenuBar);
@@ -26,7 +29,7 @@ void AccountList::DrawWindowAndUpdateValues() {
   ui::End();
 }
 
-void AccountList::DrawMenuBar() {
+void AccountListWindow::DrawMenuBar() {
   if (ImGui::BeginMenuBar())
   {
     // Draws sub options if the user clicked on the modify list item
@@ -50,7 +53,7 @@ void AccountList::DrawMenuBar() {
   }
 }
 
-void AccountList::DrawMenuSubOption(bool& is_clicked, const char* option_name) {
+void AccountListWindow::DrawMenuSubOption(bool& is_clicked, const char* option_name) {
   // Creates a submenu item and sets the boolean for the sub option if the
   // button has not already been pressed (this boolean is used in
   // other windows that will change the value to false if it is true)
@@ -61,7 +64,7 @@ void AccountList::DrawMenuSubOption(bool& is_clicked, const char* option_name) {
   }
 }
 
-void AccountList::DrawAccountList() {
+void AccountListWindow::DrawAccountList() {
   // Vector for all the account names in the container
   std::vector<std::string> account_names(container_.GetAccounts().size());
 
@@ -87,6 +90,8 @@ void AccountList::DrawAccountList() {
     add_account_pressed_ = false;
     delete_account_pressed_ = false;
   }
+}
+
 }
 
 }  // namespace gui

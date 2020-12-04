@@ -5,11 +5,13 @@
 #include <cinder/app/App.h>
 #include <cinder/app/RendererGl.h>
 #include <cinder/gl/gl.h>
+
 #include <string>
 
 #include "core/password_container.h"
-#include "gui/account_list.h"
-#include "gui/modify_account_window.h"
+#include "gui/window/account_details_window.h"
+#include "gui/window/account_list_window.h"
+#include "gui/window/modify_account_window.h"
 
 namespace passwordcontainer {
 
@@ -30,9 +32,10 @@ class PasswordContainerApp : public ci::app::App {
   PasswordContainer container_;
 
   // The account list object used as the main window
-  AccountList account_list_;
+  window::AccountListWindow account_list_;
   // The window used when modifying the an account
-  ModifyAccountWindow modify_account_window_;
+  window::ModifyAccountWindow modify_account_window_;
+  window::AccountDetailsWindow account_details_window_;
 
   // Booleans to track the action the user expects to be executed
   bool is_modification_requested_;
@@ -43,7 +46,7 @@ class PasswordContainerApp : public ci::app::App {
 
   // The index of the selected item in the list of accounts. Defaults to a value
   // where there is no account selected.
-  int selected_item_ = kNoAccountSelectedIndex;
+  int selected_item_ = window::kNoAccountSelectedIndex;
 
   // Constants for the window size
   const double kWindowSize = 600;

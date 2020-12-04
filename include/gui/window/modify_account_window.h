@@ -4,10 +4,13 @@
 #include <string>
 
 #include "core/password_container.h"
+#include "gui/window/window.h"
 
 namespace passwordcontainer {
 
 namespace gui {
+
+namespace window {
 
 // This class represents the window where account details can be modified. The
 // window has two text input fields so that users can input their new username
@@ -15,7 +18,7 @@ namespace gui {
 // and a button to start the generation, and a button to change the details and
 // cancel the modification. Finally, an error message shows up if invalid
 // details are entered.
-class ModifyAccountWindow {
+class ModifyAccountWindow : public Window {
  public:
   // Creates a new Modify Window object with the passed in container and the
   // boolean that represents whether the window should be shown or not. Also
@@ -26,12 +29,12 @@ class ModifyAccountWindow {
 
   // Draws the window to modify the account that is currently selected in the
   // container and updates the new_username and new_password parameters.
-  void DrawModifyAccountWindow();
+  void DrawWindow() override;
 
   // Updates the details of the account if the confirm button is pressed and
   // the typed in information is accurate, and makes the window disappear if the
   // cancel button is pressed.
-  void UpdateModifiedContainer();
+  void UpdateWindow() override;
 
  private:
   // Boolean that tracks whether a window was newly opened
@@ -72,6 +75,8 @@ class ModifyAccountWindow {
   // use the next time the window is opened.
   void ResetValuesToDefault();
 };
+
+}
 
 }
 

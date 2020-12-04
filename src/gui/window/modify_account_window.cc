@@ -1,11 +1,14 @@
-#include "gui/modify_account_window.h"
-#include "core/util.h"
+#include "gui/window/modify_account_window.h"
 
 #include <CinderImGui.h>
+
+#include "core/util.h"
 
 namespace passwordcontainer {
 
 namespace gui {
+
+namespace window {
 
 ModifyAccountWindow::ModifyAccountWindow(PasswordContainer& container,
                                          bool& window_active,
@@ -13,15 +16,15 @@ ModifyAccountWindow::ModifyAccountWindow(PasswordContainer& container,
     : container_(container), modify_window_active_(window_active),
       account_index_(account_index) {}
 
-void ModifyAccountWindow::DrawModifyAccountWindow() {
+void ModifyAccountWindow::DrawWindow() {
   // Makes sure the modify window is supposed to be active
   if (modify_window_active_) {
     // Starts creating the new window
     ui::Begin("Modifying Account:");
 
     // Adds the text inputs for the new username and password
-    ui::InputText("New Username", &new_username_, kGeneratePasswordMaxLength);
-    ui::InputText("New Password", &new_password_, kGeneratePasswordMaxLength);
+    ui::InputText("New Username", &new_username_);
+    ui::InputText("New Password", &new_password_);
 
     // Adds a space between the slider and the inputs
     ui::Text("");
@@ -48,7 +51,7 @@ void ModifyAccountWindow::DrawModifyAccountWindow() {
   }
 }
 
-void ModifyAccountWindow::UpdateModifiedContainer() {
+void ModifyAccountWindow::UpdateWindow() {
   if (modify_window_active_) {
     // Makes sure the account being edited doesn't exist or if
     // the cancel button is pressed.
@@ -103,6 +106,8 @@ void ModifyAccountWindow::ResetValuesToDefault() {
   invalid_details_entered_ = false;
   window_newly_opened_ = true;
   generate_password_length_ = kGeneratePasswordMinLength;
+}
+
 }
 
 }  // namespace gui
