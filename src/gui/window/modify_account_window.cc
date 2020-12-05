@@ -1,7 +1,4 @@
 #include "gui/window/modify_account_window.h"
-
-#include <CinderImGui.h>
-
 #include "core/util.h"
 
 namespace passwordcontainer {

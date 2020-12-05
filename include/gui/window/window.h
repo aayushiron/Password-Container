@@ -1,6 +1,8 @@
 #ifndef GUI_WINDOW_WINDOW_H
 #define GUI_WINDOW_WINDOW_H
 
+#include <CinderImGui.h>
+
 namespace passwordcontainer {
 
 namespace gui {

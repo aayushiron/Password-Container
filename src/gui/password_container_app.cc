@@ -17,7 +17,8 @@ PasswordContainerApp::PasswordContainerApp() : container_(100, "CorrectKey"),
       modify_account_window_(container_, is_modification_requested_,
                              selected_item_),
       account_details_window_(container_, selected_item_),
-      add_account_window_(container_, is_addition_requested_) {
+      add_account_window_(container_, is_addition_requested_),
+      change_key_window_(container_, is_key_change_requested_) {
   ci::app::setWindowSize((int)kWindowSize, (int)kWindowSize);
 
   // Loads in the data for the container from the specified file.
@@ -39,6 +40,7 @@ void PasswordContainerApp::draw() {
   modify_account_window_.DrawWindow();
   account_details_window_.DrawWindow();
   add_account_window_.DrawWindow();
+  change_key_window_.DrawWindow();
 }
 
 void PasswordContainerApp::update() {
@@ -46,6 +48,7 @@ void PasswordContainerApp::update() {
   modify_account_window_.UpdateWindow();
   account_details_window_.UpdateWindow();
   add_account_window_.UpdateWindow();
+  change_key_window_.UpdateWindow();
 }
 
 }  // namespace gui
