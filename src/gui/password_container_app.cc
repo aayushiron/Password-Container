@@ -45,6 +45,7 @@ void PasswordContainerApp::draw() {
 
 void PasswordContainerApp::update() {
   // Updates the state of the modify window
+  account_list_.UpdateWindow();
   modify_account_window_.UpdateWindow();
   account_details_window_.UpdateWindow();
   add_account_window_.UpdateWindow();

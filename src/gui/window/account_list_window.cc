@@ -7,7 +7,7 @@ namespace gui {
 
 namespace window {
 
-AccountListWindow::AccountListWindow(const PasswordContainer &container,
+AccountListWindow::AccountListWindow(PasswordContainer &container,
                                      bool &modify_bool, bool &delete_bool, bool &add_bool,
                                      bool &key_change_bool, int &selected_acc_ind)
     : container_(container), modify_account_pressed_(modify_bool),
@@ -24,6 +24,26 @@ void AccountListWindow::DrawWindow() {
 
   // Finishes creating the new window
   ui::End();
+}
+
+void AccountListWindow::UpdateWindow() {
+  if (delete_account_pressed_) {
+    // Makes sure that a valid account is selected
+    if (selected_account_ >= 0 &&
+        selected_account_ < container_.GetAccounts().size()) {
+      // Deletes the account
+      container_.DeleteAccount(container_.GetAccounts()[selected_account_].account_name);
+
+      // Makes sure no account is selected if the index is invalid after
+      // deletion
+      if (selected_account_ >= container_.GetAccounts().size()) {
+        selected_account_ = kNoAccountSelectedIndex;
+      }
+
+      // resets the boolean to check if the delete button is pressed
+      delete_account_pressed_ = false;
+    }
+  }
 }
 
 void AccountListWindow::DrawMenuBar() {

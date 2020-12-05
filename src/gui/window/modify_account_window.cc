@@ -105,7 +105,7 @@ void ModifyAccountWindow::ResetValuesToDefault() {
   generate_password_length_ = kGeneratePasswordMinLength;
 }
 
-}
+}  // namespace window
 
 }  // namespace gui
 

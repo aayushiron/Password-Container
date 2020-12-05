@@ -19,7 +19,7 @@ class AccountListWindow : public Window {
   // Creates a new AccountListWindow object using the passed in container, booleans,
   // and the current selected account index. Assumes that all values are valid
   // when creating objects.
-  AccountListWindow(const PasswordContainer& container_, bool& modify_bool,
+  AccountListWindow(PasswordContainer& container_, bool& modify_bool,
                     bool& delete_bool, bool& add_bool, bool& key_change_bool,
                     int& selected_acc_ind);
 
@@ -27,12 +27,13 @@ class AccountListWindow : public Window {
   // values of all booleans and integers that might be used by other windows.
   void DrawWindow() override;
 
-  // This window does not need this function
-  void UpdateWindow() override {};
+  // Deletes the selected account if the delete option is pressed in the menu
+  // bar
+  void UpdateWindow() override;
 
  private:
   // The password container where all of the account information is found.
-  const PasswordContainer& container_;
+  PasswordContainer& container_;
 
   // Booleans that represents whether a certain button is pressed in the menu
   // bar
