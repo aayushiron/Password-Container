@@ -87,12 +87,11 @@ void AccountListWindow::DrawAccountList() {
   // previously selected account.
   if (original_index != selected_account_) {
     modify_account_pressed_ = false;
-    add_account_pressed_ = false;
     delete_account_pressed_ = false;
   }
 }
 
-}
+}  // namespace window
 
 }  // namespace gui
 

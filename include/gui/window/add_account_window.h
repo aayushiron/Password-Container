@@ -46,6 +46,8 @@ class AddAccountWindow : public Window {
   std::string account_name_;
   std::string username_;
   std::string password_;
+
+  void ResetValuesToDefault();
 };
 
 }  // namespace window
