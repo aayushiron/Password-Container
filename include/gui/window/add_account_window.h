@@ -13,7 +13,8 @@ namespace window {
 // This class represents a window that uses the window interface. This window
 // allows a user to add their a new account to the list of all accounts that
 // already are in the app. The window has a text field for the account name,
-// username, and password.
+// username, and password. It also has a slider to generate a random password of
+// specified length.
 class AddAccountWindow : public Window {
  public:
   // Creates a new AddAccountWindow object that represents a window for the
@@ -41,6 +42,14 @@ class AddAccountWindow : public Window {
   // Booleans for the 2 buttons in the window
   bool cancel_button_pressed_ = false;
   bool add_button_pressed_ = false;
+  // Tracks the state of the generate password button in the window
+  bool generate_button_pressed_ = false;
+
+  // Constants for the minimum and maximum length of the generated password
+  const int kGeneratePasswordMinLength = 8;
+  const int kGeneratePasswordMaxLength = 32;
+  // The length of the random password to be generated
+  int generate_password_length_ = kGeneratePasswordMinLength;
 
   // Strings that represent the values added to the text boxes.
   std::string account_name_;

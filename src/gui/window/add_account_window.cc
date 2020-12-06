@@ -1,4 +1,5 @@
 #include "gui/window/add_account_window.h"
+#include "core/util.h"
 
 namespace passwordcontainer {
 
@@ -20,7 +21,15 @@ void AddAccountWindow::DrawWindow() {
     ui::InputText("Username", &username_);
     ui::InputText("Password", &password_);
 
-    // Adds a space between the text input and the button
+    // Adds a space between the slider and the inputs
+    ui::Text("");
+
+    // Creates the slider for the length of the password and the button to
+    // generate a new password
+    ui::SliderInt("Password Length", &generate_password_length_, kGeneratePasswordMinLength, kGeneratePasswordMaxLength);
+    generate_button_pressed_ = ui::Button("Generate Password");
+
+    // Adds a space between the generate button and the confirmation button
     ui::Text("");
 
     // Adds an error message if the account already exists
@@ -69,6 +78,11 @@ void AddAccountWindow::UpdateWindow() {
       ResetValuesToDefault();
     }
 
+    if (generate_button_pressed_) {
+      // Sets the password field to a randomly generated password based on the
+      // value of the slider.
+      password_ = util::GenerateRandomPassword(generate_password_length_);
+    }
   } else {
     // Makes sure values are default if the window isn't open
     ResetValuesToDefault();
