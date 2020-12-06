@@ -1,6 +1,8 @@
 #include "gui/window/account_list_window.h"
 #include "core/util.h"
 
+#include <fstream>
+
 namespace passwordcontainer {
 
 namespace gui {
@@ -8,12 +10,15 @@ namespace gui {
 namespace window {
 
 AccountListWindow::AccountListWindow(PasswordContainer &container, bool& window_open,
-                                     bool &modify_bool, bool &delete_bool, bool &add_bool,
-                                     bool &key_change_bool, int &selected_acc_ind)
+                                     bool &modify_bool, bool &add_bool,
+                                     bool &key_change_bool,
+                                     int& selected_acc_ind,
+                                     const std::string& save_location)
     : container_(container), modify_account_pressed_(modify_bool),
-      delete_account_pressed_(delete_bool), add_account_pressed_(add_bool),
+      add_account_pressed_(add_bool),
       change_key_pressed_(key_change_bool), selected_account_(selected_acc_ind),
-      window_open_(window_open) {}
+      window_open_(window_open),
+      save_file_location_(save_location) {}
 
 void AccountListWindow::DrawWindow() {
   if (window_open_) {
@@ -30,21 +35,30 @@ void AccountListWindow::DrawWindow() {
 }
 
 void AccountListWindow::UpdateWindow() {
-  if (window_open_ && delete_account_pressed_) {
-    // Makes sure that a valid account is selected
-    if (selected_account_ >= 0 &&
-        selected_account_ < container_.GetAccounts().size()) {
-      // Deletes the account
-      container_.DeleteAccount(container_.GetAccounts()[selected_account_].account_name);
+  if (window_open_) {
+    if (delete_account_pressed_) {
+      // Makes sure that a valid account is selected
+      if (selected_account_ >= 0 &&
+          selected_account_ < container_.GetAccounts().size()) {
+        // Deletes the account
+        container_.DeleteAccount(container_.GetAccounts()[selected_account_].account_name);
 
-      // Makes sure no account is selected if the index is invalid after
-      // deletion
-      if (selected_account_ >= container_.GetAccounts().size()) {
-        selected_account_ = kNoAccountSelectedIndex;
+        // Makes sure no account is selected if the index is invalid after
+        // deletion
+        if (selected_account_ >= container_.GetAccounts().size()) {
+          selected_account_ = kNoAccountSelectedIndex;
+        }
+
+        // resets the boolean to check if the delete button is pressed
+        delete_account_pressed_ = false;
       }
+    }
 
-      // resets the boolean to check if the delete button is pressed
-      delete_account_pressed_ = false;
+    if (save_pressed_) {
+      // Writes the data in the container to the file
+      std::ofstream file_output(save_file_location_);
+      file_output << container_;
+      file_output.close();
     }
   }
 }
@@ -63,9 +77,10 @@ void AccountListWindow::DrawMenuBar() {
     }
 
     // Draws sub options if the user clicked on the security item
-    if (ImGui::BeginMenu("Security"))
+    if (ImGui::BeginMenu("File"))
     {
       DrawMenuSubOption(change_key_pressed_, "Change Key");
+      DrawMenuSubOption(save_pressed_, "Save");
 
       ImGui::EndMenu();
     }

@@ -9,8 +9,10 @@ namespace gui {
 namespace window {
 
 EnterKeyWindow::EnterKeyWindow(PasswordContainer &container,
-                               bool &correct_key_entered)
-    : container_(container), correct_key_entered_(correct_key_entered) {}
+                               bool &correct_key_entered,
+                               const std::string& save_location)
+    : container_(container), correct_key_entered_(correct_key_entered),
+      save_file_location_(save_location) {}
 
 void EnterKeyWindow::DrawWindow() {
   if (!correct_key_entered_) {
@@ -44,7 +46,7 @@ void EnterKeyWindow::UpdateWindow() {
         // Tries to change the key
         container_.SetCryptographerKey(entered_key_);
         // Tries to load the save file into the container
-        std::ifstream save_file(kSaveFileLocation);
+        std::ifstream save_file(save_file_location_);
         save_file >> container_;
 
         // Sets boolean to true if there were no errors thrown when loading

@@ -18,8 +18,10 @@ class EnterKeyWindow : public Window {
  public:
   // Creates a new window to enter the key using the passed in container that
   // represents the container the data is getting loaded into and a boolean
-  // representing the correct key being entered.
-  EnterKeyWindow(PasswordContainer& container, bool& correct_key_entered);
+  // representing the correct key being entered. Also takes in a string that
+  // represents the location of the save file.
+  EnterKeyWindow(PasswordContainer& container, bool& correct_key_entered,
+                 const std::string& save_location);
 
   // Draws and updates the values of the window
   void DrawWindow() override;
@@ -38,8 +40,8 @@ class EnterKeyWindow : public Window {
 
   // The key that is being entered
   std::string entered_key_;
-  // The default location of the password's save file
-  const std::string kSaveFileLocation = "../../../tests/resources/Data.pwords";
+  // The location of the save file
+  std::string save_file_location_;
 };
 
 }  // namespace window

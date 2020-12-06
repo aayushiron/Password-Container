@@ -1,30 +1,38 @@
 #include "gui/password_container_app.h"
 
-#include <iostream>
 #include <fstream>
-#include <vector>
-
-#include "core/util.h"
 
 namespace passwordcontainer {
 
 namespace gui {
 
-PasswordContainerApp::PasswordContainerApp() : container_(100, "CorrectKey"),
+PasswordContainerApp::PasswordContainerApp() :
+      container_(kDefaultOffset, kDefaultKey),
       account_list_(container_, is_file_decrypted_, is_modification_requested_,
-                    is_deletion_requested_, is_addition_requested_,
-                    is_key_change_requested_, selected_item_),
+                    is_addition_requested_, is_key_change_requested_,
+                    selected_item_, kSaveFileLocation),
       modify_account_window_(container_, is_modification_requested_,
                              selected_item_),
       account_details_window_(container_, selected_item_),
       add_account_window_(container_, is_addition_requested_),
       change_key_window_(container_, is_key_change_requested_),
-      enter_key_window_(container_, is_file_decrypted_) {
+      enter_key_window_(container_, is_file_decrypted_, kSaveFileLocation) {
   ci::app::setWindowSize((int)kWindowSize, (int)kWindowSize);
 }
 
 void PasswordContainerApp::setup() {
   ui::initialize();
+
+  // Creates a new input stream to see if the file at kSaveFileLocation exists
+  std::ifstream input_file(kSaveFileLocation);
+  if (!input_file.is_open()) {
+    // Creates a new file at kSaveFileLocation if no file already exists there
+    std::ofstream output_file(kSaveFileLocation);
+    output_file.close();
+
+    // Makes sure the window to enter the key doesn't show up
+    is_file_decrypted_ = true;
+  }
 }
 
 void PasswordContainerApp::draw() {

@@ -20,6 +20,12 @@ namespace passwordcontainer {
 
 namespace gui {
 
+// The default location of the password's save file
+const std::string kSaveFileLocation = "../../../data/Passwords.pwords";
+// The default key and offset used for creating a new file
+const std::string kDefaultKey = "key";
+const int kDefaultOffset = 100;
+
 class PasswordContainerApp : public ci::app::App {
  public:
   PasswordContainerApp();
@@ -50,7 +56,6 @@ class PasswordContainerApp : public ci::app::App {
   // Booleans to track the action the user expects to be executed
   bool is_modification_requested_ = false;
   bool is_addition_requested_ = false;
-  bool is_deletion_requested_ = false;
   bool is_key_change_requested_ = false;
   bool is_file_decrypted_ = false;
 
