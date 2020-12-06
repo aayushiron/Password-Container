@@ -36,11 +36,11 @@ class AddAccountWindow : public Window {
   // The boolean for whether or not the window is currently active
   bool& window_active_;
   // Booleans for invalid inputs entered
-  bool account_already_exists_;
-  bool invalid_details_entered_;
+  bool account_already_exists_ = false;
+  bool invalid_details_entered_ = false;
   // Booleans for the 2 buttons in the window
-  bool cancel_button_pressed_;
-  bool add_button_pressed_;
+  bool cancel_button_pressed_ = false;
+  bool add_button_pressed_ = false;
 
   // Strings that represent the values added to the text boxes.
   std::string account_name_;

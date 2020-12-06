@@ -39,8 +39,8 @@ class AccountDetailsWindow : public Window {
   int& account_index_;
 
   // Booleans for whether the window is open or if the copy button is pressed
-  bool window_open_;
-  bool copy_password_pressed_;
+  bool window_open_ = false;
+  bool copy_password_pressed_ = false;
 
   // The account name, username, and password that are in the account at
   // account_index

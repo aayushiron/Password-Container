@@ -19,9 +19,15 @@ class AccountListWindow : public Window {
   // Creates a new AccountListWindow object using the passed in container, booleans,
   // and the current selected account index. Assumes that all values are valid
   // when creating objects.
-  AccountListWindow(PasswordContainer& container_, bool& modify_bool,
-                    bool& delete_bool, bool& add_bool, bool& key_change_bool,
-                    int& selected_acc_ind);
+  //
+  // Takes in a PasswordContainer object that represents the container being
+  // shown on screen. Then takes in booleans for if the window should be open,
+  // boolean for modifying accounts, deleting accounts, adding accounts, and
+  // for changing accounts, all in order. Finally takes in an int which
+  // represents the index of the account that is currently selected.
+  AccountListWindow(PasswordContainer& container_, bool& window_open,
+                    bool& modify_bool, bool& delete_bool, bool& add_bool,
+                    bool& key_change_bool, int& selected_acc_ind);
 
   // Draws the window with the menu bar and a list of all accounts. Updates the
   // values of all booleans and integers that might be used by other windows.
@@ -41,6 +47,8 @@ class AccountListWindow : public Window {
   bool& delete_account_pressed_;
   bool& add_account_pressed_;
   bool& change_key_pressed_;
+  // Boolean that checks if the window should be open or not
+  bool& window_open_;
 
   // The index of the account that is currently selected in the list
   int& selected_account_;

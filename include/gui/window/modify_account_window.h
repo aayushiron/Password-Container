@@ -38,16 +38,16 @@ class ModifyAccountWindow : public Window {
 
  private:
   // Boolean that tracks whether a window was newly opened
-  bool window_newly_opened_;
+  bool window_newly_opened_ = false;
   // Boolean that signifies whether the details entered in are invalid (Shows
   // error message)
-  bool invalid_details_entered_;
+  bool invalid_details_entered_ = false;
   // Tracks the state of the confirm button in the window
-  bool confirm_button_pressed_;
+  bool confirm_button_pressed_ = false;
   // Tracks the state of the cancel button in the window
-  bool cancel_button_pressed_;
+  bool cancel_button_pressed_ = false;
   // Tracks the state of the generate password button in the window
-  bool generate_button_pressed_;
+  bool generate_button_pressed_ = false;
   // Boolean that signifies whether the modify window is active.
   bool& modify_window_active_;
 

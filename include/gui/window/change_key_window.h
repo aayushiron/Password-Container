@@ -33,10 +33,10 @@ class ChangeKeyWindow : public Window {
   // Checks if the window should currently be active
   bool& window_active_;
   // Checks if invalid input was entered
-  bool invalid_key_entered_;
+  bool invalid_key_entered_ = false;
   // Booleans to see if any buttons were pressed
-  bool change_key_pressed_;
-  bool cancel_button_pressed_;
+  bool change_key_pressed_ = false;
+  bool cancel_button_pressed_ = false;
 
   // The new key that the user inputs
   std::string new_key_;

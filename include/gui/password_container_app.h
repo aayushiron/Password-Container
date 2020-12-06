@@ -14,6 +14,7 @@
 #include "gui/window/modify_account_window.h"
 #include "gui/window/add_account_window.h"
 #include "gui/window/change_key_window.h"
+#include "gui/window/enter_key_window.h"
 
 namespace passwordcontainer {
 
@@ -43,13 +44,15 @@ class PasswordContainerApp : public ci::app::App {
   window::AddAccountWindow add_account_window_;
   // The window used to change the key
   window::ChangeKeyWindow change_key_window_;
+  // The window used to enter the key when starting the app
+  window::EnterKeyWindow enter_key_window_;
 
   // Booleans to track the action the user expects to be executed
-  bool is_modification_requested_;
-  bool is_addition_requested_;
-  bool is_deletion_requested_;
-  bool is_container_loaded_;
-  bool is_key_change_requested_;
+  bool is_modification_requested_ = false;
+  bool is_addition_requested_ = false;
+  bool is_deletion_requested_ = false;
+  bool is_key_change_requested_ = false;
+  bool is_file_decrypted_ = false;
 
   // The index of the selected item in the list of accounts. Defaults to a value
   // where there is no account selected.

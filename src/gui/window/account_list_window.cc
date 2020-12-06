@@ -7,27 +7,30 @@ namespace gui {
 
 namespace window {
 
-AccountListWindow::AccountListWindow(PasswordContainer &container,
+AccountListWindow::AccountListWindow(PasswordContainer &container, bool& window_open,
                                      bool &modify_bool, bool &delete_bool, bool &add_bool,
                                      bool &key_change_bool, int &selected_acc_ind)
     : container_(container), modify_account_pressed_(modify_bool),
       delete_account_pressed_(delete_bool), add_account_pressed_(add_bool),
-      change_key_pressed_(key_change_bool), selected_account_(selected_acc_ind){}
+      change_key_pressed_(key_change_bool), selected_account_(selected_acc_ind),
+      window_open_(window_open) {}
 
 void AccountListWindow::DrawWindow() {
-  // Starts creating the new window (false as second parameter to get rid of x
-  // button at top right of window).
-  ui::Begin("Accounts:", false, ImGuiWindowFlags_MenuBar);
+  if (window_open_) {
+    // Starts creating the new window (false as second parameter to get rid of x
+    // button at top right of window).
+    ui::Begin("Accounts:", false, ImGuiWindowFlags_MenuBar);
 
-  DrawMenuBar();
-  DrawAccountList();
+    DrawMenuBar();
+    DrawAccountList();
 
-  // Finishes creating the new window
-  ui::End();
+    // Finishes creating the new window
+    ui::End();
+  }
 }
 
 void AccountListWindow::UpdateWindow() {
-  if (delete_account_pressed_) {
+  if (window_open_ && delete_account_pressed_) {
     // Makes sure that a valid account is selected
     if (selected_account_ >= 0 &&
         selected_account_ < container_.GetAccounts().size()) {
