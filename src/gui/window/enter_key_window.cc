@@ -10,9 +10,11 @@ namespace window {
 
 EnterKeyWindow::EnterKeyWindow(PasswordContainer &container,
                                bool &correct_key_entered,
-                               const std::string& save_location)
-    : container_(container), correct_key_entered_(correct_key_entered),
-      save_file_location_(save_location) {}
+                               const std::string &save_location)
+    : container_(container),
+      correct_key_entered_(correct_key_entered),
+      save_file_location_(save_location) {
+}
 
 void EnterKeyWindow::DrawWindow() {
   if (!correct_key_entered_) {

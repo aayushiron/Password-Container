@@ -6,8 +6,8 @@ namespace passwordcontainer {
 
 namespace gui {
 
-PasswordContainerApp::PasswordContainerApp() :
-      container_(kDefaultOffset, kDefaultKey),
+PasswordContainerApp::PasswordContainerApp()
+    : container_(kDefaultOffset, kDefaultKey),
       account_list_(container_, is_file_decrypted_, is_modification_requested_,
                     is_addition_requested_, is_key_change_requested_,
                     selected_item_, kSaveFileLocation),
@@ -40,6 +40,7 @@ void PasswordContainerApp::draw() {
   ci::Color8u background_color("black");
   ci::gl::clear(background_color);
 
+  // Draws all windows used in the app
   enter_key_window_.DrawWindow();
   account_list_.DrawWindow();
   modify_account_window_.DrawWindow();

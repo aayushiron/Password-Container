@@ -76,10 +76,10 @@ class ModifyAccountWindow : public Window {
   void ResetValuesToDefault();
 };
 
-}
+}  // namespace window
 
-}
+}  // namespace gui
 
-}
+}  // namespace passwordcontainer
 
 #endif  // GUI_MODIFY_ACCOUNT_WINDOW_H

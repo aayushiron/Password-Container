@@ -24,10 +24,10 @@ class Window {
   virtual void UpdateWindow() = 0;
 };
 
-}
+}  // namespace window
 
-}
+}  // namespace gui
 
-}
+}  // namespace passwordcontainer
 
 #endif  // GUI_WINDOW_WINDOW_H

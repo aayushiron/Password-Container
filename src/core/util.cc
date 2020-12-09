@@ -1,6 +1,7 @@
 #include "core/util.h"
 
 #include <rpc.h>
+
 #include <algorithm>
 #include <iterator>
 #include <random>
@@ -64,11 +65,11 @@ std::string GenerateRandomPassword(size_t password_length) {
 
 // Code from:
 // https://stackoverflow.com/questions/26032039/convert-vectorstring-into-char-c
-std::vector<char *> ConvertStringVecToCharVec(std::vector<std::string> &input) {
+std::vector<char*> ConvertStringVecToCharVec(std::vector<std::string>& input) {
   std::vector<char*> result;
 
   // remember the nullptr terminator
-  result.reserve(input.size()+1);
+  result.reserve(input.size() + 1);
 
   // Adds the data for each string into the result vector
   for (std::string& data : input) {
@@ -85,7 +86,7 @@ void CopyToClipboard(const std::string& s) {
   OpenClipboard(0);
   EmptyClipboard();
   HGLOBAL hg = GlobalAlloc(GMEM_MOVEABLE, s.size() + 1);
-  if (!hg){
+  if (!hg) {
     CloseClipboard();
     return;
   }

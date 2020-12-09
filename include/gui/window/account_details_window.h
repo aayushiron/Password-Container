@@ -1,12 +1,12 @@
 #ifndef GUI_ACCOUNT_DETAILS_WINDOW_H
 #define GUI_ACCOUNT_DETAILS_WINDOW_H
 
+#include <string>
+
 #include "core/password_container.h"
 #include "gui/window/window.h"
 
-#include <string>
-
-namespace passwordcontainer  {
+namespace passwordcontainer {
 
 namespace gui {
 
@@ -31,6 +31,7 @@ class AccountDetailsWindow : public Window {
   // Updates the state of all variables in the window based on the current
   // account_index_ and whether buttons were pressed.
   void UpdateWindow() override;
+
  private:
   // The container used to store all the account data
   const PasswordContainer& container_;

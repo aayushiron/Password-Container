@@ -8,7 +8,8 @@ namespace window {
 
 ChangeKeyWindow::ChangeKeyWindow(PasswordContainer& container,
                                  bool& window_active)
-    : container_(container), window_active_(window_active) {}
+    : container_(container), window_active_(window_active) {
+}
 
 void ChangeKeyWindow::DrawWindow() {
   if (window_active_) {
@@ -39,7 +40,7 @@ void ChangeKeyWindow::UpdateWindow() {
   if (window_active_) {
     if (change_key_pressed_) {
       // Checks if the entered key is invalid
-      if (new_key_ == "") {
+      if (new_key_.empty()) {
         invalid_key_entered_ = true;
 
       } else {

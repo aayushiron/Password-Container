@@ -1,8 +1,8 @@
 #ifndef GUI_WINDOW_ENTER_KEY_WINDOW_H
 #define GUI_WINDOW_ENTER_KEY_WINDOW_H
 
-#include "gui/window/window.h"
 #include "core/password_container.h"
+#include "gui/window/window.h"
 
 namespace passwordcontainer {
 

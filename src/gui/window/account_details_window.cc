@@ -1,7 +1,8 @@
 #include "gui/window/account_details_window.h"
-#include "core/util.h"
 
 #include <string>
+
+#include "core/util.h"
 
 namespace passwordcontainer {
 
@@ -11,8 +12,8 @@ namespace window {
 
 AccountDetailsWindow::AccountDetailsWindow(const PasswordContainer& container,
                                            int& account_index)
-    : container_(container),
-      account_index_(account_index) {}
+    : container_(container), account_index_(account_index) {
+}
 
 void AccountDetailsWindow::DrawWindow() {
   if (window_open_) {
@@ -58,8 +59,8 @@ void AccountDetailsWindow::UpdateWindow() {
   }
 }
 
-}
+}  // namespace window
 
-}
+}  // namespace gui
 
-}
+}  // namespace passwordcontainer

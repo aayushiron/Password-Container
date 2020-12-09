@@ -81,7 +81,7 @@ void ModifyAccountWindow::UpdateWindow() {
 
 void ModifyAccountWindow::TryChangingDetails() {
   // Makes sure both the username and password are valid
-  if (new_username_ != "" && new_password_ != "") {
+  if (!new_username_.empty() && !new_password_.empty()) {
     // Changes the details of the account being edited if the new details
     // are valid
     std::string account_name = container_.GetAccounts()[account_index_].account_name;

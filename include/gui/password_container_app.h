@@ -11,10 +11,10 @@
 #include "core/password_container.h"
 #include "gui/window/account_details_window.h"
 #include "gui/window/account_list_window.h"
-#include "gui/window/modify_account_window.h"
 #include "gui/window/add_account_window.h"
 #include "gui/window/change_key_window.h"
 #include "gui/window/enter_key_window.h"
+#include "gui/window/modify_account_window.h"
 
 namespace passwordcontainer {
 

@@ -16,9 +16,9 @@ namespace window {
 // Account names that is the main interface for indicating the selected account.
 class AccountListWindow : public Window {
  public:
-  // Creates a new AccountListWindow object using the passed in container, booleans,
-  // and the current selected account index. Assumes that all values are valid
-  // when creating objects.
+  // Creates a new AccountListWindow object using the passed in container,
+  // booleans, and the current selected account index. Assumes that all values
+  // are valid when creating objects.
   //
   // Takes in a PasswordContainer object that represents the container being
   // shown on screen. Then takes in booleans for if the window should be open,
@@ -28,8 +28,7 @@ class AccountListWindow : public Window {
   // selected. Also takes in a string that represents the location of the save
   // file.
   AccountListWindow(PasswordContainer& container_, bool& window_open,
-                    bool& modify_bool, bool& add_bool,
-                    bool& key_change_bool,
+                    bool& modify_bool, bool& add_bool, bool& key_change_bool,
                     int& selected_acc_ind, const std::string& save_location);
 
   // Draws the window with the menu bar and a list of all accounts. Updates the
@@ -74,7 +73,7 @@ class AccountListWindow : public Window {
   void DrawAccountList();
 };
 
-}
+}  // namespace window
 
 }  // namespace gui
 

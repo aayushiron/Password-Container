@@ -1,4 +1,5 @@
 #include "gui/window/add_account_window.h"
+
 #include "core/util.h"
 
 namespace passwordcontainer {
@@ -9,7 +10,8 @@ namespace window {
 
 AddAccountWindow::AddAccountWindow(PasswordContainer &container,
                                    bool &window_active)
-    : container_(container), window_active_(window_active) {}
+    : container_(container), window_active_(window_active) {
+}
 
 void AddAccountWindow::DrawWindow() {
   if (window_active_) {
@@ -26,7 +28,8 @@ void AddAccountWindow::DrawWindow() {
 
     // Creates the slider for the length of the password and the button to
     // generate a new password
-    ui::SliderInt("Password Length", &generate_password_length_, kGeneratePasswordMinLength, kGeneratePasswordMaxLength);
+    ui::SliderInt("Password Length", &generate_password_length_,
+                  kGeneratePasswordMinLength, kGeneratePasswordMaxLength);
     generate_button_pressed_ = ui::Button("Generate Password");
 
     // Adds a space between the generate button and the confirmation button
@@ -58,7 +61,7 @@ void AddAccountWindow::UpdateWindow() {
       account_already_exists_ = false;
       invalid_details_entered_ = false;
 
-      if (account_name_ == "" || username_ == "" || password_ == "") {
+      if (account_name_.empty() || username_.empty() || password_.empty()) {
         invalid_details_entered_ = true;
 
       } else if (container_.HasAccount(account_name_)) {
