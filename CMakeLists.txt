@@ -40,12 +40,17 @@ get_filename_component(APP_PATH "${CMAKE_CURRENT_SOURCE_DIR}/" ABSOLUTE)
 
 include("${CINDER_PATH}/proj/cmake/modules/cinderMakeApp.cmake")
 
-list(APPEND CORE_SOURCE_FILES src/core/password_container.cc src/core/util.cc)
+list(APPEND CORE_SOURCE_FILES src/core/password_container.cc src/core/cryptographer.cc src/core/util.cc)
 
-list(APPEND SOURCE_FILES    ${CORE_SOURCE_FILES}
+list(APPEND CLI_SOURCE_FILES src/cli/command_line_input.cc src/cli/argument_parser.cc)
+
+list(APPEND SOURCE_FILES    ${CORE_SOURCE_FILES}   ${CLI_SOURCE_FILES}
         src/gui/password_container_app.cc)
 
-list(APPEND TEST_FILES tests/test_password_container.cc tests/test_util.cc)
+list(APPEND TEST_FILES tests/test_password_container.cc tests/test_util.cc tests/test_command_line_input.cc tests/test_argument_parser.cc)
+
+add_executable(password-container-cli apps/password_container_cli_main.cc ${CORE_SOURCE_FILES} ${CLI_SOURCE_FILES})
+target_include_directories(password-container-cli PRIVATE include)
 
 ci_make_app(
         APP_NAME        password-container-app

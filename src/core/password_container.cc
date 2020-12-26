@@ -9,13 +9,8 @@ using std::vector;
 
 namespace passwordcontainer {
 
-PasswordContainer::PasswordContainer(size_t offset, const string& key) {
-  if (offset < kMinimumCharacterOffset || key.empty()) {
-    throw std::invalid_argument("Invalid parameters passed in to constructor!");
-  }
-
-  character_offset_ = offset;
-  key_ = key;
+PasswordContainer::PasswordContainer(size_t offset, const string& key)
+    : cryptographer_(offset, key) {
 }
 
 vector<PasswordContainer::AccountDetails> PasswordContainer::GetAccounts()
@@ -23,20 +18,16 @@ vector<PasswordContainer::AccountDetails> PasswordContainer::GetAccounts()
   return accounts_;
 }
 
-void PasswordContainer::SetKey(const string& new_key) {
-  if (new_key.empty()) {
-    throw std::invalid_argument("Invalid parameter passed in to SetKey!");
-  }
-
-  key_ = new_key;
+void PasswordContainer::SetCryptographerKey(const std::string& new_key) {
+  cryptographer_.SetKey(new_key);
 }
 
-void PasswordContainer::SetOffset(size_t offset) {
-  if (offset < kMinimumCharacterOffset) {
-    throw std::invalid_argument("The passed in offset is too small.");
-  }
+string PasswordContainer::GetCryptographerKey() const {
+  return cryptographer_.GetKey();
+}
 
-  character_offset_ = offset;
+void PasswordContainer::SetCryptographerOffset(size_t offset) {
+  cryptographer_.SetOffset(offset);
 }
 
 void PasswordContainer::AddAccount(const string& account_name,
@@ -52,7 +43,7 @@ void PasswordContainer::AddAccount(const string& account_name,
 
   // Creates and adds the new account to the rest of the accounts
   AccountDetails new_account;
-  new_account.name = account_name;
+  new_account.account_name = account_name;
   new_account.username = username;
   new_account.password = password;
   accounts_.push_back(new_account);
@@ -64,7 +55,7 @@ void PasswordContainer::DeleteAccount(const string& account_name) {
   }
 
   // Erases the object with the passed in account_name
-  auto account_iterator = FindIterator(account_name);
+  auto account_iterator = FindAccount(account_name);
   accounts_.erase(account_iterator);
 }
 
@@ -80,7 +71,7 @@ void PasswordContainer::ModifyAccount(const std::string& account_name,
   }
 
   // Changes the username and password of the account with account_name
-  auto account = FindIterator(account_name);
+  auto account = FindAccount(account_name);
   account->username = username;
   account->password = password;
 }
@@ -89,7 +80,8 @@ std::istream& operator>>(std::istream& input, PasswordContainer& container) {
   // Code to get all data from the input file found here:
   // https://stackoverflow.com/questions/3203452/how-to-read-entire-stream-into-a-stdstring
   string encrypted_string(std::istreambuf_iterator<char>(input), {});
-  string decrypted_string = container.DecryptString(encrypted_string);
+  string decrypted_string =
+      container.cryptographer_.DecryptString(encrypted_string);
 
   container.AddAllData(decrypted_string);
 
@@ -99,45 +91,9 @@ std::istream& operator>>(std::istream& input, PasswordContainer& container) {
 std::ostream& operator<<(std::ostream& output,
                          const PasswordContainer& container) {
   string data_representation = container.GenerateStringRepresentation();
-  output << container.EncryptString(data_representation);
+  output << container.cryptographer_.EncryptString(data_representation);
 
   return output;
-}
-
-string PasswordContainer::DecryptString(const string& str) const {
-  size_t offset = CalculateRealOffset();
-  string decrypted_string;
-
-  // Loops through every encrypted character in the passed in string
-  for (size_t index = 0; index < str.size();
-       index += kEncryptedCharacterLength) {
-    // Gets the int ASCII representation of the char
-    string encrypted_char = str.substr(index, kEncryptedCharacterLength);
-    int char_int_representation =
-        util::ConvertStringToInt(encrypted_char) - offset;
-
-    // Makes sure the encrypted char strings actually refers to a char
-    if (!IsValidChar(char_int_representation)) {
-      throw std::invalid_argument("Bad string data passed in!");
-    }
-
-    // Adds the character to the string
-    decrypted_string += static_cast<char>(char_int_representation);
-  }
-
-  return decrypted_string;
-}
-
-string PasswordContainer::EncryptString(const string& str) const {
-  size_t offset = CalculateRealOffset();
-  string encrypted_string;
-
-  // Encrypts every character in the passed in string and returns it
-  for (char c : str) {
-    encrypted_string += std::to_string(static_cast<size_t>(c) + offset);
-  }
-
-  return encrypted_string;
 }
 
 string PasswordContainer::GenerateStringRepresentation() const {
@@ -145,8 +101,8 @@ string PasswordContainer::GenerateStringRepresentation() const {
 
   // Loops through all accounts and adds their details to the final string
   for (const AccountDetails& account : accounts_) {
-    string_representation +=
-        account.name + '\t' + account.username + '\t' + account.password + '\n';
+    string_representation += account.account_name + '\t' + account.username +
+                             '\t' + account.password + '\n';
   }
 
   // Removes the trailing \n character from the string
@@ -183,7 +139,7 @@ void PasswordContainer::AddOneAccountData(const string& line_data) {
     // program currently is on
     switch (detail_index) {
       case kAccountNameIndex:
-        current_account.name = current_detail;
+        current_account.account_name = current_detail;
         break;
       case kUsernameIndex:
         current_account.username = current_detail;
@@ -197,22 +153,10 @@ void PasswordContainer::AddOneAccountData(const string& line_data) {
   accounts_.push_back(current_account);
 }
 
-size_t PasswordContainer::CalculateRealOffset() const {
-  // Counts the total of the ASCII value of each value in the key
-  size_t key_ascii_total = 0;
-  for (char c : key_) {
-    key_ascii_total += c;
-  }
-
-  // Adds character_offset_ to each character and takes the average of the
-  // for the calculated offset.
-  return (key_ascii_total + key_.size() * character_offset_) / key_.size();
-}
-
 bool PasswordContainer::HasAccount(const std::string& account_name) {
   // Loops through all accounts and check if the name is equal to account_name
   for (const AccountDetails& account : accounts_) {
-    if (account.name == account_name) {
+    if (account.account_name == account_name) {
       return true;
     }
   }
@@ -221,22 +165,15 @@ bool PasswordContainer::HasAccount(const std::string& account_name) {
 }
 
 std::vector<PasswordContainer::AccountDetails>::iterator
-PasswordContainer::FindIterator(const std::string& account_name) {
+PasswordContainer::FindAccount(const std::string& account_name) {
   for (auto iterator = accounts_.begin(); iterator != accounts_.end();
        iterator++) {
-    if (iterator->name == account_name) {
+    if (iterator->account_name == account_name) {
       return iterator;
     }
   }
 
   return accounts_.end();
-}
-
-bool PasswordContainer::IsValidChar(int int_representation) const {
-  // Returns true if the passed in int represents a tab character, new line
-  // character, or any character in the ASCII range of ' ' to '~'
-  return int_representation == '\t' || int_representation == '\n' ||
-         (int_representation >= ' ' && int_representation <= '~');
 }
 
 }  // namespace passwordcontainer

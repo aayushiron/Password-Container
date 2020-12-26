@@ -8,27 +8,24 @@ using passwordcontainer::PasswordContainer;
 using std::ifstream;
 using std::stringstream;
 
-void CheckForValidData(const PasswordContainer& container) {
+bool HasValidData(const PasswordContainer& container) {
   std::vector<PasswordContainer::AccountDetails> accounts =
       container.GetAccounts();
 
-  SECTION("Has correct data for first account") {
-    REQUIRE(accounts[0].name == "Account1");
-    REQUIRE(accounts[0].username == "Username1");
-    REQUIRE(accounts[0].password == "Password1");
-  }
+  bool correct_first_account = accounts[0].account_name == "Account1" &&
+                               accounts[0].username == "Username1" &&
+                               accounts[0].password == "Password1";
 
-  SECTION("Has correct data for second account") {
-    REQUIRE(accounts[1].name == "Account2");
-    REQUIRE(accounts[1].username == "Username2");
-    REQUIRE(accounts[1].password == "Password2");
-  }
+  bool correct_second_account = accounts[1].account_name == "Account2" &&
+                                accounts[1].username == "Username2" &&
+                                accounts[1].password == "Password2";
 
-  SECTION("Has correct data for third account") {
-    REQUIRE(accounts[2].name == "Account3");
-    REQUIRE(accounts[2].username == "Username3");
-    REQUIRE(accounts[2].password == "Password3");
-  }
+  bool correct_third_account = accounts[2].account_name == "Account3" &&
+                               accounts[2].username == "Username3" &&
+                               accounts[2].password == "Password3";
+
+  return correct_first_account && correct_second_account &&
+         correct_third_account;
 }
 
 TEST_CASE("Tests for constructor") {
@@ -55,13 +52,13 @@ TEST_CASE("Tests for overloaded >> operator") {
 
   SECTION("Throws error for wrong key passed in") {
     ifstream file("../../../tests/resources/Data.pwords");
-    container.SetKey("Key");
+    container.SetCryptographerKey("Key");
     REQUIRE_THROWS_AS(file >> container, std::invalid_argument);
   }
 
   SECTION("Throws error for wrong offset passed in") {
     ifstream file("../../../tests/resources/Data.pwords");
-    container.SetOffset(200);
+    container.SetCryptographerOffset(200);
     REQUIRE_THROWS_AS(file >> container, std::invalid_argument);
   }
 
@@ -69,7 +66,7 @@ TEST_CASE("Tests for overloaded >> operator") {
     ifstream file("../../../tests/resources/Data.pwords");
     file >> container;
 
-    CheckForValidData(container);
+    REQUIRE(HasValidData(container));
   }
 }
 
@@ -102,7 +99,7 @@ TEST_CASE("Tests for overloaded << operator") {
   }
 
   SECTION("Correctly encrypts data when the key is changed") {
-    container.SetKey("NewDifferentKey");
+    container.SetCryptographerKey("NewDifferentKey");
     stringstream stream;
     stream << container;
 
@@ -117,7 +114,7 @@ TEST_CASE("Tests for overloaded << operator") {
   }
 
   SECTION("Correctly encrypts data when the offset is changed") {
-    container.SetOffset(200);
+    container.SetCryptographerOffset(200);
     stringstream stream;
     stream << container;
 
@@ -135,53 +132,54 @@ TEST_CASE("Tests for overloaded << operator") {
     stringstream stream;
     stream << container;
 
-    CheckForValidData(container);
+    REQUIRE(HasValidData(container));
   }
 }
 
-TEST_CASE("Tests for SetKey") {
+TEST_CASE("Tests for SetCryptographerKey") {
   PasswordContainer container(100, "CorrectKey");
   ifstream file("../../../tests/resources/Data.pwords");
   file >> container;
 
   SECTION("Throws error when passed in key is empty") {
-    REQUIRE_THROWS_AS(container.SetKey(""), std::invalid_argument);
+    REQUIRE_THROWS_AS(container.SetCryptographerKey(""), std::invalid_argument);
   }
 
   SECTION("Does nothing when passed in key is valid") {
-    REQUIRE_NOTHROW(container.SetKey("NewKey"));
+    REQUIRE_NOTHROW(container.SetCryptographerKey("NewKey"));
   }
 
   // This test is here because if the accounts are calculated whenever the
   // GetAccounts function is called, changing the key will change the
   // decryption of the data
   SECTION("Doesn't cause data to get corrupted") {
-    container.SetKey("NewKey");
+    container.SetCryptographerKey("NewKey");
 
-    CheckForValidData(container);
+    REQUIRE(HasValidData(container));
   }
 }
 
-TEST_CASE("Tests for SetOffset") {
+TEST_CASE("Tests for SetCryptographerOffset") {
   PasswordContainer container(100, "CorrectKey");
   ifstream file("../../../tests/resources/Data.pwords");
   file >> container;
 
   SECTION("Throws error when passed in offset is too small") {
-    REQUIRE_THROWS_AS(container.SetOffset(99), std::invalid_argument);
+    REQUIRE_THROWS_AS(container.SetCryptographerOffset(99),
+                      std::invalid_argument);
   }
 
   SECTION("Does nothing when passed in offset is valid") {
-    REQUIRE_NOTHROW(container.SetOffset(101));
+    REQUIRE_NOTHROW(container.SetCryptographerOffset(101));
   }
 
   // This test is here because if the accounts are calculated whenever the
   // GetAccounts function is called, changing the offset will change the
   // decryption of the data
   SECTION("Doesn't cause data to get corrupted") {
-    container.SetOffset(200);
+    container.SetCryptographerOffset(200);
 
-    CheckForValidData(container);
+    REQUIRE(HasValidData(container));
   }
 }
 
@@ -193,15 +191,15 @@ TEST_CASE("Tests for AddAccount") {
         container.AddAccount("NewAccount", "NewUsername", "NewPassword"));
 
     SECTION("Account name is correct") {
-      REQUIRE(container.GetAccounts()[0].name == "NewAccount");
+      REQUIRE(container.GetAccounts()[0].account_name == "NewAccount");
     }
 
     SECTION("Username is correct") {
-      REQUIRE(container.GetAccounts()[0].name == "NewAccount");
+      REQUIRE(container.GetAccounts()[0].account_name == "NewAccount");
     }
 
     SECTION("Password is correct") {
-      REQUIRE(container.GetAccounts()[0].name == "NewAccount");
+      REQUIRE(container.GetAccounts()[0].account_name == "NewAccount");
     }
   }
 
@@ -213,19 +211,19 @@ TEST_CASE("Tests for AddAccount") {
         container.AddAccount("NewAccount", "NewUsername", "NewPassword"));
 
     SECTION("Doesn't change previous data") {
-      CheckForValidData(container);
+      REQUIRE(HasValidData(container));
     }
 
     SECTION("New Account name is correct") {
-      REQUIRE(container.GetAccounts()[3].name == "NewAccount");
+      REQUIRE(container.GetAccounts()[3].account_name == "NewAccount");
     }
 
     SECTION("New Username is correct") {
-      REQUIRE(container.GetAccounts()[3].name == "NewAccount");
+      REQUIRE(container.GetAccounts()[3].account_name == "NewAccount");
     }
 
     SECTION("New Password is correct") {
-      REQUIRE(container.GetAccounts()[3].name == "NewAccount");
+      REQUIRE(container.GetAccounts()[3].account_name == "NewAccount");
     }
   }
 
@@ -271,8 +269,8 @@ TEST_CASE("Tests for DeleteAccount") {
     }
 
     SECTION("Remaining account names are correct") {
-      REQUIRE(container.GetAccounts()[0].name == "Account2");
-      REQUIRE(container.GetAccounts()[1].name == "Account3");
+      REQUIRE(container.GetAccounts()[0].account_name == "Account2");
+      REQUIRE(container.GetAccounts()[1].account_name == "Account3");
     }
 
     SECTION("Remaining usernames are correct") {
@@ -317,7 +315,7 @@ TEST_CASE("Tests for ModifyAccount") {
     }
 
     SECTION("Changed account name is correct") {
-      REQUIRE(container.GetAccounts()[0].name == "Account1");
+      REQUIRE(container.GetAccounts()[0].account_name == "Account1");
     }
 
     SECTION("Remaining usernames are correct") {
@@ -349,5 +347,33 @@ TEST_CASE("Tests for ModifyAccount") {
       REQUIRE_THROWS_AS(container.ModifyAccount("name", "", "pass"),
                         std::invalid_argument);
     }
+  }
+}
+
+TEST_CASE("Tests for HasAccount") {
+  PasswordContainer container(100, "CorrectKey");
+  ifstream file("../../../tests/resources/Data.pwords");
+  file >> container;
+
+  SECTION("Returns true when the container has the account") {
+    REQUIRE(container.HasAccount("Account1"));
+  }
+
+  SECTION("Returns false when the container doesn't have the account") {
+    REQUIRE_FALSE(container.HasAccount("RandomAccount"));
+  }
+}
+
+TEST_CASE("Tests for FindAccount") {
+  PasswordContainer container(100, "CorrectKey");
+  ifstream file("../../../tests/resources/Data.pwords");
+  file >> container;
+
+  SECTION("Returns correct element iterator for account that exists") {
+    PasswordContainer::AccountDetails account =
+        *container.FindAccount("Account1");
+    REQUIRE(account.account_name == "Account1");
+    REQUIRE(account.username == "Username1");
+    REQUIRE(account.password == "Password1");
   }
 }
