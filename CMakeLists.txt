@@ -13,15 +13,6 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 # Let's nicely support folders in IDE's
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
-# Warning flags
-if(MSVC)
-    # warning level 3 and all warnings as errors
-    add_compile_options(/W3 /WX)
-else()
-    # lots of warnings and all warnings as errors
-    add_compile_options(-Wall -Wpedantic -Werror)
-endif()
-
 # FetchContent added in CMake 3.11, downloads during the configure step
 include(FetchContent)
 
@@ -49,18 +40,19 @@ get_filename_component(APP_PATH "${CMAKE_CURRENT_SOURCE_DIR}/" ABSOLUTE)
 
 include("${CINDER_PATH}/proj/cmake/modules/cinderMakeApp.cmake")
 
-list(APPEND CORE_SOURCE_FILES)
+list(APPEND CORE_SOURCE_FILES src/core/password_container.cc src/core/util.cc)
 
 list(APPEND SOURCE_FILES    ${CORE_SOURCE_FILES}
         src/gui/password_container_app.cc)
 
-list(APPEND TEST_FILES)
+list(APPEND TEST_FILES tests/test_password_container.cc tests/test_util.cc)
 
 ci_make_app(
         APP_NAME        password-container-app
         CINDER_PATH     ${CINDER_PATH}
         SOURCES         apps/password-container-main.cc ${SOURCE_FILES}
         INCLUDES        include
+        BLOCKS          Cinder-ImGui
 )
 
 ci_make_app(
@@ -69,6 +61,7 @@ ci_make_app(
         SOURCES         tests/test_main.cc ${SOURCE_FILES} ${TEST_FILES}
         INCLUDES        include
         LIBRARIES       catch2
+        BLOCKS          Cinder-ImGui
 )
 
 if(MSVC)
