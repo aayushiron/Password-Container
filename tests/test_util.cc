@@ -1,6 +1,43 @@
+#include <rpc.h>
+
 #include <catch2/catch.hpp>
 
 #include "core/util.h"
+
+// Code from:
+// https://stackoverflow.com/questions/14762456/getclipboarddatacf-text
+bool ClipboardHasString(const std::string& clipboard_string) {
+  // Try opening the clipboard
+  if (!OpenClipboard(nullptr)) {
+    return false;
+  }
+
+  // Get handle of clipboard object for ANSI text
+  HANDLE hData = GetClipboardData(CF_TEXT);
+  if (hData == nullptr) {
+    CloseClipboard();
+    return false;
+  }
+
+  // Lock the handle to get the actual text pointer
+  char * pszText = static_cast<char*>( GlobalLock(hData) );
+  if (pszText == nullptr) {
+    GlobalUnlock( hData );
+    CloseClipboard();
+    return false;
+  }
+
+  // Save text in a string class instance
+  std::string text( pszText );
+
+  // Release the lock
+  GlobalUnlock( hData );
+
+  // Release the clipboard
+  CloseClipboard();
+
+  return text == clipboard_string;
+}
 
 TEST_CASE("Tests for ConvertStringToInt") {
   SECTION("Converts negative int representation correctly") {
@@ -103,5 +140,34 @@ TEST_CASE("Tests for GenerateRandomPassword") {
         REQUIRE(is_valid_character);
       }
     }
+  }
+}
+
+TEST_CASE("Tests for ConvertStringVecToCharVec") {
+  SECTION("Only has one nullptr when converting an empty vector") {
+    std::vector<std::string> input;
+    REQUIRE(util::ConvertStringVecToCharVec(input).size() == 1);
+    REQUIRE(util::ConvertStringVecToCharVec(input)[0] == nullptr);
+  }
+
+  SECTION("Correctly converts the string a string vector to a char* vector") {
+    std::vector<std::string> input = {"one", "two", "3"};
+    REQUIRE(util::ConvertStringVecToCharVec(input).size() == 4);
+    REQUIRE(util::ConvertStringVecToCharVec(input)[0] == &input[0][0]);
+    REQUIRE(util::ConvertStringVecToCharVec(input)[1] == &input[1][0]);
+    REQUIRE(util::ConvertStringVecToCharVec(input)[2] == &input[2][0]);
+    REQUIRE(util::ConvertStringVecToCharVec(input)[3] == nullptr);
+  }
+}
+
+TEST_CASE("Tests for CopyToClipboard") {
+  SECTION("Puts empty string into clipboard") {
+    REQUIRE_NOTHROW(util::CopyToClipboard(""));
+    REQUIRE(ClipboardHasString(""));
+  }
+
+  SECTION("Puts populated string into clipboard") {
+    REQUIRE_NOTHROW(util::CopyToClipboard("populatEd string 1"));
+    REQUIRE(ClipboardHasString("populatEd string 1"));
   }
 }

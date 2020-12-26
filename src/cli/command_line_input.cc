@@ -169,7 +169,8 @@ void CommandLineInput::GeneratePassword() {
       string input = PromptForInput("Please enter the size of the password: ");
       password_size = static_cast<size_t>(util::ConvertStringToInt(input));
       break;
-    } catch (...) {}
+    } catch (...) {
+    }
   }
 
   user_output_ << util::GenerateRandomPassword(password_size) << std::endl

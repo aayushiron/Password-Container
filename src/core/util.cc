@@ -1,5 +1,9 @@
 #include "core/util.h"
 
+#include <rpc.h>
+
+#include <algorithm>
+#include <iterator>
 #include <random>
 #include <sstream>
 #include <string>
@@ -57,6 +61,40 @@ std::string GenerateRandomPassword(size_t password_length) {
   }
 
   return generated_password;
+}
+
+// Code from:
+// https://stackoverflow.com/questions/26032039/convert-vectorstring-into-char-c
+std::vector<char*> ConvertStringVecToCharVec(std::vector<std::string>& input) {
+  std::vector<char*> result;
+
+  // remember the nullptr terminator
+  result.reserve(input.size() + 1);
+
+  // Adds the data for each string into the result vector
+  for (std::string& data : input) {
+    result.push_back(&data[0]);
+  }
+
+  result.push_back(nullptr);
+  return result;
+}
+
+// Code from:
+// http://www.cplusplus.com/forum/beginner/14349/
+void CopyToClipboard(const std::string& s) {
+  OpenClipboard(0);
+  EmptyClipboard();
+  HGLOBAL hg = GlobalAlloc(GMEM_MOVEABLE, s.size() + 1);
+  if (!hg) {
+    CloseClipboard();
+    return;
+  }
+  memcpy(GlobalLock(hg), s.c_str(), s.size());
+  GlobalUnlock(hg);
+  SetClipboardData(CF_TEXT, hg);
+  CloseClipboard();
+  GlobalFree(hg);
 }
 
 }  // namespace util
