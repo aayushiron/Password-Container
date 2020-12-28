@@ -21,7 +21,7 @@ namespace passwordcontainer {
 namespace gui {
 
 // The default location of the password's save file
-const std::string kSaveFileLocation = "../../../data/Passwords.pwords";
+const std::string kSaveFileLocation = "Passwords.pwords";
 // The default key and offset used for creating a new file
 const std::string kDefaultKey = "key";
 const int kDefaultOffset = 100;
