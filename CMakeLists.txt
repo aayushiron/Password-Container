@@ -35,6 +35,19 @@ if(NOT catch2_POPULATED)
     target_include_directories(catch2 INTERFACE ${catch2_SOURCE_DIR}/single_include)
 endif()
 
+FetchContent_Declare(
+        aes256
+        GIT_REPOSITORY https://github.com/Urban82/Aes256
+)
+
+# Adds aes256 encryption library
+FetchContent_GetProperties(aes256)
+if(NOT aes256_POPULATED)
+    FetchContent_Populate(aes256)
+    add_library(aes256 INTERFACE)
+    target_include_directories(aes256 INTERFACE ${aes256_SOURCE_DIR}/src)
+endif()
+
 get_filename_component(CINDER_PATH "${CMAKE_CURRENT_SOURCE_DIR}/../../" ABSOLUTE)
 get_filename_component(APP_PATH "${CMAKE_CURRENT_SOURCE_DIR}/" ABSOLUTE)
 
@@ -63,6 +76,7 @@ ci_make_app(
         CINDER_PATH     ${CINDER_PATH}
         SOURCES         apps/password-container-main.cc ${SOURCE_FILES}
         INCLUDES        include
+        LIBRARIES       aes256
         BLOCKS          Cinder-ImGui
 )
 
