@@ -54,3 +54,4 @@ The project uses the following libraries:
 * [Cinder-ImGui](https://github.com/aayushiron/Cinder-ImGui)
 * [Catch2](https://github.com/catchorg/Catch2.git)
 * [SHA-2 Source Code](www.zedwood.com/article/cpp-sha256-function)
+* [Aes256 by Urban82](https://github.com/Urban82/Aes256)
