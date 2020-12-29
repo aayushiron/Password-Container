@@ -5,7 +5,7 @@
 #include <string>
 #include <vector>
 
-#include "core/cryptographer.h"
+#include "core/encryption/cryptographer.h"
 
 namespace passwordcontainer {
 
