@@ -37,15 +37,14 @@ endif()
 
 FetchContent_Declare(
         aes256
-        GIT_REPOSITORY https://github.com/Urban82/Aes256
+        GIT_REPOSITORY https://github.com/aayushiron/Aes256
 )
 
 # Adds aes256 encryption library
 FetchContent_GetProperties(aes256)
 if(NOT aes256_POPULATED)
     FetchContent_Populate(aes256)
-    add_library(aes256 INTERFACE)
-    target_include_directories(aes256 INTERFACE ${aes256_SOURCE_DIR}/src)
+    add_subdirectory(${aes256_SOURCE_DIR} ${aes256_BINARY_DIR})
 endif()
 
 get_filename_component(CINDER_PATH "${CMAKE_CURRENT_SOURCE_DIR}/../../" ABSOLUTE)
