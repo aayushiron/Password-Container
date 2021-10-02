@@ -40,7 +40,9 @@ get_filename_component(APP_PATH "${CMAKE_CURRENT_SOURCE_DIR}/" ABSOLUTE)
 
 include("${CINDER_PATH}/proj/cmake/modules/cinderMakeApp.cmake")
 
-list(APPEND CORE_SOURCE_FILES src/core/password_container.cc src/core/cryptographer.cc src/core/util.cc)
+list(APPEND ENCRYPTION_SOURCE_FILES src/core/encryption/cryptographer.cc src/core/encryption/sha256.cc)
+
+list(APPEND CORE_SOURCE_FILES ${ENCRYPTION_SOURCE_FILES} src/core/password_container.cc src/core/util.cc)
 
 list(APPEND CLI_SOURCE_FILES src/cli/command_line_input.cc src/cli/argument_parser.cc)
 
