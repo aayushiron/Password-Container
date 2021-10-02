@@ -3,6 +3,7 @@
 #include <sstream>
 
 #include "core/util.h"
+#include "core/encryption/sha256.h"
 
 using std::string;
 using std::vector;
@@ -10,7 +11,7 @@ using std::vector;
 namespace passwordcontainer {
 
 PasswordContainer::PasswordContainer(size_t offset, const string& key)
-    : cryptographer_(offset, key) {
+    : cryptographer_(offset, sha256(key)) {
 }
 
 vector<PasswordContainer::AccountDetails> PasswordContainer::GetAccounts()
@@ -19,7 +20,7 @@ vector<PasswordContainer::AccountDetails> PasswordContainer::GetAccounts()
 }
 
 void PasswordContainer::SetCryptographerKey(const std::string& new_key) {
-  cryptographer_.SetKey(new_key);
+  cryptographer_.SetKey(sha256(new_key));
 }
 
 string PasswordContainer::GetCryptographerKey() const {
